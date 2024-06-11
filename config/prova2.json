@@ -1,0 +1,76 @@
+{
+    "evolutionarySystem": {
+        "stopEvolutionProcessOn": {
+            "minimumBestPerformance": 1.0,
+            "minimumAveragePerformance": 0.9,
+            "maximumCyclesToProcess": 1000000
+        },
+        "evolutionProcessConditions": {
+            "vitalAdvantages": {
+                "neuronConnectionDensityComp": false,
+                "calculationEficiency": false
+            },
+            "reproductiveAdvantages": {
+                "neuronConnectionDensityComp": true,
+                "calculationEficiency": true
+            }
+        },
+        "propertiesToFollow": {
+            "neuronConnectionDensity": true,
+            "calculationEficiency": false,
+            "linearityDegree": false
+        },
+        "evolutionEnvironment": {
+            "verificationProcess": "TRUE_TABLE",
+            "configEditors": {
+                "TRUE_TABLE": [{
+                        "inputs": [0, 0],
+                        "outputs": [1]
+                    }, {
+                        "inputs": [0, 1],
+                        "outputs": [0]
+                    }, {
+                        "inputs": [1, 0],
+                        "outputs": [0]
+                    }, {
+                        "inputs": [1, 1],
+                        "outputs": [1]
+                    }],
+                "EVENT_ENVIRONMENT": "This editor is not implemented yet"
+            }
+        }
+    },
+    "AnnBuilding": {
+        "populationSize": 100,
+        "numberOfInputs": 2,
+        "numberOfOutputs": 1,
+        "numberOfReceivingNeurons": 2,
+        "numberOfResponseNeurons": 1,
+        "hasIntermediateNeurons": false,
+        "initialNumberOfNeurons": 3,
+        "maxNumberOfNeurons": 10,
+        "TypeOfContributionInputs": "SEPARATED_CONTRIBUTION",
+        "TypeOfContributionOutputs": "SEPARATED_CONTRIBUTION",
+        "initialMinumumWeight": -0.1,
+        "initialMaximumWeight": 0.1,
+        "typeOfActivationFunction": "SIGM",
+        "numberOfEqualValuesToCheckStability": 4,
+        "equalityRangeToCompareValues": 0,
+        "neuronsUsedToCheckStability": "OUTPUT_ONLY",
+        "maximumLoopsTogetResults": 20,
+        "forwardConnectionPercent": 80,
+        "backwardConnectionPercent": 35,
+        "inputContributionPercent": 50,
+        "outputContributionPercent": 50
+    },
+    "AnnMutation": {
+        "linearityChangingRate": 0.01,
+        "linearityMaxIncrement": 0.1,
+        "weightChangingRate": 0.01,
+        "weightMaxIncrement": 0.1,
+        "connectionRate": 0.01,
+        "disconnectionRate": 0.01,
+        "contributionInputRate": 0.005,
+        "contributionOutpuRate": 0.005
+    }
+}
