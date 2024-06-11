@@ -25,3 +25,8 @@
 
 .DS_Store
 
+/data/
+!/data/tmp.dat
+/config/
+!/config/default_cfg.json
+
