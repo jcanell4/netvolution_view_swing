@@ -2007,6 +2007,14 @@ public class EvolutionProcessFrame extends NetvolutionBasicFrame{
         nnConfig.setConnectionProbabilityForwardInterNeuron(jsonConfig.get("AnnBuilding").get("forwardConnectionPercent").asInt());
         nnConfig.setInputContributionrobability(jsonConfig.get("AnnBuilding").get("inputContributionPercent").asInt());
         nnConfig.setOutputContributionProbability(jsonConfig.get("AnnBuilding").get("outputContributionPercent").asInt());
+        nnConfig.setReceiverNeuronNumberMutationRate((float) jsonConfig.get("AnnMutation").get("contributionInputRate").asDouble());
+        nnConfig.setResponseNeuronNumberMutationRate((float) jsonConfig.get("AnnMutation").get("contributionOutpuRate").asDouble());
+        nnConfig.setThresholdMutationRate((float) jsonConfig.get("AnnMutation").get("linearityChangingRate").asDouble());
+        nnConfig.setMaxThresholdExchangeFactorValue((float) jsonConfig.get("AnnMutation").get("linearityMaxIncrement").asDouble());
+        nnConfig.setWeightsMutationRate((float) jsonConfig.get("AnnMutation").get("weightChangingRate").asDouble());
+        nnConfig.setMaxWeightExchangevalue((float) jsonConfig.get("AnnMutation").get("weightMaxIncrement").asDouble());
+        nnConfig.setConnectionMutationRate((float) jsonConfig.get("AnnMutation").get("connectionRate").asDouble());
+        nnConfig.setDisconnectionMutationRate((float) jsonConfig.get("AnnMutation").get("disconnectionRate").asDouble());
         
         ArrayNode ar = (ArrayNode) jsonConfig.get("evolutionarySystem").get("evolutionEnvironment").get("configEditors").get(
                 jsonConfig.get("evolutionarySystem").get("evolutionEnvironment").get("verificationProcess").asText());

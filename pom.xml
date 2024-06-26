@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.elsquatrecaps</groupId>
-    <artifactId>netvolution-view-swing</artifactId>
+    <artifactId>netvolution_view_swing</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
@@ -19,7 +19,7 @@
         </dependency>
         <dependency>
             <groupId>org.elsquatrecaps.rsjcb</groupId>
-            <artifactId>netvolution-model</artifactId>
+            <artifactId>netvolution_model</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -74,6 +74,22 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                  <repositoryId>github</repositoryId>
+                  <url>https://maven.pkg.github.com/jcanell4/netvolution_view_swing</url>
+                </configuration>
+            </plugin>                        
         </plugins>
-    </build>    
+    </build>   
+     <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub owner Apache Maven Packages </name>
+            <url>https://maven.pkg.github.com/jcanell4/netvolution_view_swing</url>
+        </repository>
+    </distributionManagement> 
 </project>

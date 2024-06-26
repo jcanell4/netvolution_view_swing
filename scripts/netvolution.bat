@@ -1,3 +1,3 @@
-java -jarNetvolutionViewSwing-jar-with-dependencies.jar
+java -jar netvolution.jar
 
 

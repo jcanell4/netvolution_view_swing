@@ -8,6 +8,8 @@ import com.mxgraph.layout.mxParallelEdgeLayout;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.view.mxGraph;
 import java.awt.BorderLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -18,6 +20,12 @@ import org.elsquatrecaps.netvolution.shareddata.NetvolutionSharedData;
 import org.elsquatrecaps.netvolution.view.swing.graphmodel.NeuralNetworkInformationSheet;
 import org.elsquatrecaps.netvolution.view.swing.graphmodel.PtpNeuralNetworkPopulationViewer;
 import org.elsquatrecaps.netvolution.view.swing.tools.TableToolForIntegerTrueTableVerifier;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
  *
@@ -38,6 +46,82 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         initComponents();
         initPopulations();
         updateAgent();
+    }
+    
+    private void initMoreComponents(){
+        this.addComponentListener(new ComponentAdapter(){
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e); 
+                TableToolForIntegerTrueTableVerifier.updateColumnWidth(initPopVerifierTable);
+                TableToolForIntegerTrueTableVerifier.updateColumnWidth(endPopVerifierTable);
+            }
+        });
+    
+    }
+    
+    public void refreshInitialJFreeDistribution(){
+        this.initialBetaPanelGraph.removeAll();
+        this.initialBiasPanelGraph.removeAll();
+        this.drawInitialJFreeDistribution();
+        this.initialBetaPanelGraph.repaint();
+        this.initialBiasPanelGraph.repaint();
+        this.initialBetaPanelGraph.revalidate();
+        this.initialBiasPanelGraph.revalidate();
+    }
+    
+    private void refreshFinalJFreeDistribution(){
+        this.finalBetaPanelGraph.removeAll();
+        this.finalBiasPanelGraph.removeAll();
+        this.drawFinalJFreeDistribution();
+        this.finalBetaPanelGraph.repaint();
+        this.finalBiasPanelGraph.repaint();
+        this.finalBetaPanelGraph.revalidate();
+        this.finalBiasPanelGraph.revalidate();
+    }
+    
+    private void drawInitialJFreeDistribution(){
+        //XYSeries serie ;
+        DefaultCategoryDataset datasetBias = new DefaultCategoryDataset();     
+        DefaultCategoryDataset datasetBeta = new DefaultCategoryDataset();     
+        for(int i=0; i<initialPopViewer.getInformationSheet().getBiasList().size(); i++){
+            datasetBias.setValue(initialPopViewer.getInformationSheet().getBiasList().get(i), "frequency",  initialPopViewer.getInformationSheet().getBiasIntervals().get(i));           
+        }
+        for(int i=0; i<initialPopViewer.getInformationSheet().getBetaList().size(); i++){
+            datasetBeta.setValue(initialPopViewer.getInformationSheet().getBetaList().get(i), "frequency",  initialPopViewer.getInformationSheet().getBetaIntervals().get(i));           
+        }
+        JFreeChart chartBias = ChartFactory.createBarChart("Bias distribution", "Interval values", "Frequency", datasetBias);
+        ChartPanel viewerBias = new ChartPanel(chartBias);
+        chartBias.getCategoryPlot().getDomainAxis().setCategoryLabelPositions(CategoryLabelPositions.UP_45);
+        chartBias.getCategoryPlot().getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());        
+        initialBiasPanelGraph.add(viewerBias);
+        JFreeChart chartBeta = ChartFactory.createBarChart("Activation function beta distribution", "Interval values", "Frequency", datasetBeta);
+        chartBeta.getCategoryPlot().getDomainAxis().setCategoryLabelPositions(CategoryLabelPositions.UP_45);
+        chartBeta.getCategoryPlot().getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());        
+        ChartPanel viewerBeta = new ChartPanel(chartBeta);
+        initialBetaPanelGraph.add(viewerBeta);
+    }
+    
+    private void drawFinalJFreeDistribution(){
+        //XYSeries serie ;
+        DefaultCategoryDataset datasetBias = new DefaultCategoryDataset();     
+        DefaultCategoryDataset datasetBeta = new DefaultCategoryDataset();     
+        for(int i=0; i<finalPopViewer.getInformationSheet().getBiasList().size(); i++){
+            datasetBias.setValue(finalPopViewer.getInformationSheet().getBiasList().get(i), "frequency",  finalPopViewer.getInformationSheet().getBiasIntervals().get(i));           
+        }
+        for(int i=0; i<finalPopViewer.getInformationSheet().getBetaList().size(); i++){
+            datasetBeta.setValue(finalPopViewer.getInformationSheet().getBetaList().get(i), "frequency",  finalPopViewer.getInformationSheet().getBetaIntervals().get(i));           
+        }
+        JFreeChart chartBias = ChartFactory.createBarChart("Bias distribution", "Interval values", "Frequency", datasetBias);
+        chartBias.getCategoryPlot().getDomainAxis().setCategoryLabelPositions(CategoryLabelPositions.UP_45);
+        chartBias.getCategoryPlot().getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        ChartPanel viewerBias = new ChartPanel(chartBias);
+        finalBiasPanelGraph.add(viewerBias);
+        JFreeChart chartBeta = ChartFactory.createBarChart("Activation function beta distribution", "Interval values", "Frequency", datasetBeta);
+        chartBeta.getCategoryPlot().getDomainAxis().setCategoryLabelPositions(CategoryLabelPositions.UP_45);
+        chartBeta.getCategoryPlot().getRangeAxis().setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        ChartPanel viewerBeta = new ChartPanel(chartBeta);
+        finalBetaPanelGraph.add(viewerBeta);
     }
     
     private void initPopulations(){
@@ -87,7 +171,8 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         this.initialGraphPanel.revalidate();
         this.finalGraphPanel.repaint();
         this.finalGraphPanel.revalidate();
-        
+        refreshInitialJFreeDistribution();
+        refreshFinalJFreeDistribution();
     }
     
     public void updateAgentOfInitialPop(){
@@ -139,6 +224,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         this.activationFunctionLinearityTextField1.setText(String.format("%6.4f", info.getActivationFunctionLinearityDegree()));
         this.performanceTextField1.setText(String.format("%6.4f", info.getPerformance()));        
         TableToolForIntegerTrueTableVerifier.updateTableFromEstructure(info.getResultsFromValueTable(), endPopVerifierTable);        
+        this.agentTextualViewTextPane.setText(info.getTextualView());
         // Añadir el grafo a un componente Swing
         mxGraph graph = finalPopViewer.getGraph();
         mxGraphComponent graphComponent = new mxGraphComponent(graph);
@@ -235,7 +321,8 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         toNextAgentOfInitialPopButton1 = new javax.swing.JButton();
         toLastAgentOfInitialPopButton1 = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        initialAgentPropertiesScrollPane = new javax.swing.JScrollPane();
         jPanel7 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -258,6 +345,10 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         jPanel15 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         initPopVerifierTable = new javax.swing.JTable();
+        initialAgentTextualViewScrollPane = new javax.swing.JScrollPane();
+        agentTextualViewTextPane1 = new javax.swing.JTextPane();
+        initialBiasPanelGraph = new javax.swing.JPanel();
+        initialBetaPanelGraph = new javax.swing.JPanel();
         initialGraphScrollPane = new javax.swing.JScrollPane();
         initialGraphPanel = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
@@ -272,7 +363,8 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         toNextAgentOfFinalPopButton1 = new javax.swing.JButton();
         toLastAgentOfFinalPopButton1 = new javax.swing.JButton();
         jPanel11 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        finalAgentPropertiesScrollPane = new javax.swing.JScrollPane();
         jPanel16 = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
@@ -295,6 +387,10 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         jPanel20 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         endPopVerifierTable = new javax.swing.JTable();
+        finalAgentTextualViewScrollPane = new javax.swing.JScrollPane();
+        agentTextualViewTextPane = new javax.swing.JTextPane();
+        finalBiasPanelGraph = new javax.swing.JPanel();
+        finalBetaPanelGraph = new javax.swing.JPanel();
         finalGraphScrollPane = new javax.swing.JScrollPane();
         finalGraphPanel = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
@@ -505,7 +601,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(108, Short.MAX_VALUE)
                 .addComponent(toFirstAgentOfInitialPopButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(toPreviousAgentOfInitialPopButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -513,15 +609,24 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
                 .addComponent(toNextAgentOfInitialPopButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(toLastAgentOfInitialPopButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(109, Short.MAX_VALUE))
         );
 
         jPanel2.add(jPanel4, java.awt.BorderLayout.WEST);
 
         jPanel5.setPreferredSize(new java.awt.Dimension(1024, 329));
 
+        jTabbedPane2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jTabbedPane2.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        jTabbedPane2.setMinimumSize(new java.awt.Dimension(690, 339));
+        jTabbedPane2.setPreferredSize(new java.awt.Dimension(740, 339));
+
+        initialAgentPropertiesScrollPane.setMinimumSize(new java.awt.Dimension(500, 295));
+        initialAgentPropertiesScrollPane.setViewportView(null);
+
         jPanel7.setMaximumSize(new java.awt.Dimension(700, 32767));
-        jPanel7.setPreferredSize(new java.awt.Dimension(600, 295));
+        jPanel7.setMinimumSize(new java.awt.Dimension(500, 295));
+        jPanel7.setPreferredSize(new java.awt.Dimension(500, 295));
 
         jLabel1.setFont(new java.awt.Font("Liberation Sans", 1, 13)); // NOI18N
         jLabel1.setText("Agent ID:");
@@ -551,8 +656,8 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
                 .addContainerGap()
                 .addComponent(jLabel19)
                 .addGap(18, 18, 18)
-                .addComponent(performanceTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(performanceTextField)
+                .addContainerGap())
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -564,17 +669,17 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        initPopVerifierTable.setModel(TableToolForIntegerTrueTableVerifier.createTableModelForIORTrueTableVerifier(2,1,false));
+        initPopVerifierTable.setModel(TableToolForIntegerTrueTableVerifier.createTableModelForIORSTrueTableVerifier(2,1,false));
         jScrollPane5.setViewportView(initPopVerifierTable);
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
         jPanel15Layout.setHorizontalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
+            .addGroup(jPanel15Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -590,7 +695,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -630,7 +735,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
                     .addComponent(activationFunctionLinearityTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -666,23 +771,39 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(activationFunctionLinearityTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
 
-        jScrollPane1.setViewportView(jPanel7);
+        initialAgentPropertiesScrollPane.setViewportView(jPanel7);
+
+        jTabbedPane2.addTab("Agent properties", initialAgentPropertiesScrollPane);
+
+        initialAgentTextualViewScrollPane.setViewportView(agentTextualViewTextPane1);
+
+        jTabbedPane2.addTab("Agent textual view", initialAgentTextualViewScrollPane);
+
+        initialBiasPanelGraph.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        initialBiasPanelGraph.setLayout(new java.awt.BorderLayout());
+        jTabbedPane2.addTab("Bias distribution", initialBiasPanelGraph);
+
+        initialBetaPanelGraph.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        initialBetaPanelGraph.setLayout(new java.awt.BorderLayout());
+        jTabbedPane2.addTab("Beta distribution in sigmoid function", initialBetaPanelGraph);
 
         initialGraphScrollPane.setBackground(new java.awt.Color(242, 242, 242));
         initialGraphScrollPane.setPreferredSize(new java.awt.Dimension(1000, 1000));
+
+        initialGraphPanel.setPreferredSize(new java.awt.Dimension(1000, 359));
 
         javax.swing.GroupLayout initialGraphPanelLayout = new javax.swing.GroupLayout(initialGraphPanel);
         initialGraphPanel.setLayout(initialGraphPanelLayout);
         initialGraphPanelLayout.setHorizontalGroup(
             initialGraphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 997, Short.MAX_VALUE)
+            .addGap(0, 1000, Short.MAX_VALUE)
         );
         initialGraphPanelLayout.setVerticalGroup(
             initialGraphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 334, Short.MAX_VALUE)
+            .addGap(0, 359, Short.MAX_VALUE)
         );
 
         initialGraphScrollPane.setViewportView(initialGraphPanel);
@@ -692,14 +813,18 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(initialGraphScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 998, Short.MAX_VALUE))
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(initialGraphScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 629, Short.MAX_VALUE)
+                .addGap(1, 1, 1))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
-            .addComponent(initialGraphScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(initialGraphScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(2, 2, 2))
         );
 
         jPanel2.add(jPanel5, java.awt.BorderLayout.CENTER);
@@ -767,7 +892,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(111, Short.MAX_VALUE)
                 .addComponent(toFirstAgentOfInitialPopButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(toPreviousAgentOfInitialPopButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -775,7 +900,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
                 .addComponent(toNextAgentOfInitialPopButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(toLastAgentOfInitialPopButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(112, Short.MAX_VALUE))
         );
 
         jPanel2.add(jPanel6, java.awt.BorderLayout.EAST);
@@ -845,7 +970,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(119, Short.MAX_VALUE)
                 .addComponent(toFirstAgentOfFinalPopButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(toPreviousAgentOfFinalPopButton)
@@ -853,15 +978,22 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
                 .addComponent(toNextAgentOfFinalPopButton1)
                 .addGap(10, 10, 10)
                 .addComponent(toLastAgentOfFinalPopButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
 
         jPanel3.add(jPanel10, java.awt.BorderLayout.WEST);
 
+        jPanel11.setAutoscrolls(true);
         jPanel11.setPreferredSize(new java.awt.Dimension(1024, 329));
 
-        jPanel16.setMaximumSize(new java.awt.Dimension(700, 32767));
-        jPanel16.setPreferredSize(new java.awt.Dimension(600, 295));
+        jTabbedPane1.setPreferredSize(new java.awt.Dimension(600, 500));
+
+        finalAgentPropertiesScrollPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        finalAgentPropertiesScrollPane.setPreferredSize(new java.awt.Dimension(542, 500));
+        finalAgentPropertiesScrollPane.setViewportView(null);
+
+        jPanel16.setMaximumSize(new java.awt.Dimension(704, 32767));
+        jPanel16.setMinimumSize(new java.awt.Dimension(300, 0));
 
         jLabel20.setFont(new java.awt.Font("Liberation Sans", 1, 13)); // NOI18N
         jLabel20.setText("Agent ID:");
@@ -891,8 +1023,8 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
                 .addContainerGap()
                 .addComponent(jLabel29)
                 .addGap(18, 18, 18)
-                .addComponent(performanceTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(performanceTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(8, Short.MAX_VALUE))
         );
         jPanel19Layout.setVerticalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -904,23 +1036,23 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        endPopVerifierTable.setModel(TableToolForIntegerTrueTableVerifier.createTableModelForIORTrueTableVerifier(2,1,false));
+        endPopVerifierTable.setModel(TableToolForIntegerTrueTableVerifier.createTableModelForIORSTrueTableVerifier(2,1,false));
         jScrollPane6.setViewportView(endPopVerifierTable);
 
         javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
         jPanel20.setLayout(jPanel20Layout);
         jPanel20Layout.setHorizontalGroup(
             jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel20Layout.createSequentialGroup()
+            .addGroup(jPanel20Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel20Layout.setVerticalGroup(
             jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel20Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -929,11 +1061,10 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         jPanel18Layout.setHorizontalGroup(
             jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel18Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         jPanel18Layout.setVerticalGroup(
             jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -970,14 +1101,14 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
                     .addComponent(activationFunctionLinearityTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel16Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel16Layout.createSequentialGroup()
                         .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel20)
@@ -1006,22 +1137,36 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
                         .addGroup(jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(activationFunctionLinearityTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(76, Short.MAX_VALUE))
         );
 
-        jScrollPane3.setViewportView(jPanel16);
+        finalAgentPropertiesScrollPane.setViewportView(jPanel16);
+
+        jTabbedPane1.addTab("Agent properties", finalAgentPropertiesScrollPane);
+
+        finalAgentTextualViewScrollPane.setViewportView(agentTextualViewTextPane);
+
+        jTabbedPane1.addTab("Agent textual view", finalAgentTextualViewScrollPane);
+
+        finalBiasPanelGraph.setLayout(new java.awt.BorderLayout());
+        jTabbedPane1.addTab("Bias distribution", finalBiasPanelGraph);
+
+        finalBetaPanelGraph.setLayout(new java.awt.BorderLayout());
+        jTabbedPane1.addTab("Beta distribution in sigmoid function", finalBetaPanelGraph);
 
         finalGraphScrollPane.setPreferredSize(new java.awt.Dimension(1000, 1000));
+
+        finalGraphPanel.setPreferredSize(new java.awt.Dimension(1732, 436));
 
         javax.swing.GroupLayout finalGraphPanelLayout = new javax.swing.GroupLayout(finalGraphPanel);
         finalGraphPanel.setLayout(finalGraphPanelLayout);
         finalGraphPanelLayout.setHorizontalGroup(
             finalGraphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 998, Short.MAX_VALUE)
+            .addGap(0, 1732, Short.MAX_VALUE)
         );
         finalGraphPanelLayout.setVerticalGroup(
             finalGraphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 327, Short.MAX_VALUE)
+            .addGap(0, 436, Short.MAX_VALUE)
         );
 
         finalGraphScrollPane.setViewportView(finalGraphPanel);
@@ -1031,14 +1176,18 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(finalGraphScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 699, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(finalGraphScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3)
-            .addComponent(finalGraphScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(finalGraphScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE))
+                .addGap(5, 5, 5))
         );
 
         jPanel3.add(jPanel11, java.awt.BorderLayout.CENTER);
@@ -1101,7 +1250,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(119, Short.MAX_VALUE)
                 .addComponent(toFirstAgentOfFinalPopButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(toPreviousAgentOfFinalPopButton1)
@@ -1109,7 +1258,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
                 .addComponent(toNextAgentOfFinalPopButton)
                 .addGap(10, 10, 10)
                 .addComponent(toLastAgentOfFinalPopButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
 
         jPanel3.add(jPanel12, java.awt.BorderLayout.EAST);
@@ -1118,7 +1267,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1810, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 1443, Short.MAX_VALUE)
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
@@ -1126,7 +1275,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE))
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
@@ -1318,7 +1467,8 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         this.initialGraphPanel.removeAll();
         this.updateAgentOfInitialPop();
         this.initialGraphPanel.repaint();
-        this.initialGraphPanel.revalidate();        
+        this.initialGraphPanel.revalidate();    
+        refreshInitialJFreeDistribution();
     }//GEN-LAST:event_toPreviousAgentOfInitialPopButtonActionPerformed
 
     private void toFirstAgentOfInitialPopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toFirstAgentOfInitialPopButtonActionPerformed
@@ -1328,6 +1478,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         this.updateAgentOfInitialPop();
         this.initialGraphPanel.repaint();
         this.initialGraphPanel.revalidate();
+        refreshInitialJFreeDistribution();
     }//GEN-LAST:event_toFirstAgentOfInitialPopButtonActionPerformed
 
     private void toPreviousAgentOfFinalPopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toPreviousAgentOfFinalPopButtonActionPerformed
@@ -1336,7 +1487,8 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         this.finalGraphPanel.removeAll();
         this.updateAgentOfFinalPop();
         this.finalGraphPanel.repaint();
-        this.finalGraphPanel.revalidate();        
+        this.finalGraphPanel.revalidate();  
+        refreshFinalJFreeDistribution();
     }//GEN-LAST:event_toPreviousAgentOfFinalPopButtonActionPerformed
 
     private void toNextAgentOfInitialPopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toNextAgentOfInitialPopButtonActionPerformed
@@ -1345,7 +1497,8 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         this.initialGraphPanel.removeAll();
         this.updateAgentOfInitialPop();
         this.initialGraphPanel.repaint();
-        this.initialGraphPanel.revalidate();                
+        this.initialGraphPanel.revalidate();      
+        refreshInitialJFreeDistribution();
     }//GEN-LAST:event_toNextAgentOfInitialPopButtonActionPerformed
 
     private void toLastAgentOfInitialPopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toLastAgentOfInitialPopButtonActionPerformed
@@ -1354,6 +1507,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         this.updateAgentOfInitialPop();
         this.initialGraphPanel.repaint();
         this.initialGraphPanel.revalidate();
+        refreshInitialJFreeDistribution();
     }//GEN-LAST:event_toLastAgentOfInitialPopButtonActionPerformed
 
     private void toNextAgentOfFinalPopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toNextAgentOfFinalPopButtonActionPerformed
@@ -1362,7 +1516,8 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         this.finalGraphPanel.removeAll();
         this.updateAgentOfFinalPop();
         this.finalGraphPanel.repaint();
-        this.finalGraphPanel.revalidate();                
+        this.finalGraphPanel.revalidate();  
+        refreshFinalJFreeDistribution();
     }//GEN-LAST:event_toNextAgentOfFinalPopButtonActionPerformed
 
     private void toLastAgentOfFinalPopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toLastAgentOfFinalPopButtonActionPerformed
@@ -1518,6 +1673,8 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
     private javax.swing.JTextField activationFunctionLinearityTextField1;
     private javax.swing.JTextField agentIdTextField;
     private javax.swing.JTextField agentIdTextFieldFinal;
+    private javax.swing.JTextPane agentTextualViewTextPane;
+    private javax.swing.JTextPane agentTextualViewTextPane1;
     private javax.swing.JTextField calculationEficiencyTextField;
     private javax.swing.JTextField calculationEficiencyTextField1;
     private javax.swing.JMenuItem cancelEvolveProcessMenuItem;
@@ -1525,10 +1682,18 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
     private javax.swing.JTable endPopVerifierTable;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JScrollPane finalAgentPropertiesScrollPane;
+    private javax.swing.JScrollPane finalAgentTextualViewScrollPane;
+    private javax.swing.JPanel finalBetaPanelGraph;
+    private javax.swing.JPanel finalBiasPanelGraph;
     private javax.swing.JPanel finalGraphPanel;
     private javax.swing.JScrollPane finalGraphScrollPane;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JTable initPopVerifierTable;
+    private javax.swing.JScrollPane initialAgentPropertiesScrollPane;
+    private javax.swing.JScrollPane initialAgentTextualViewScrollPane;
+    private javax.swing.JPanel initialBetaPanelGraph;
+    private javax.swing.JPanel initialBiasPanelGraph;
     private javax.swing.JPanel initialGraphPanel;
     private javax.swing.JScrollPane initialGraphScrollPane;
     private javax.swing.JTextField inputNeuronsTextField;
@@ -1570,13 +1735,13 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton loadAgentDetailsButton;
     private javax.swing.JMenuItem loadEvolutionMenuItem;

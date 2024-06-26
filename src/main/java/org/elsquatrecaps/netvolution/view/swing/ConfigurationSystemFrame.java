@@ -1959,16 +1959,16 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
                 fieldIsMain=false;
             }
         });
-        optimizationMethodUsedComboBox.addActionListener((ActionEvent ae)->{
-            if(optimizationMethodUsedComboBox.getSelectedIndex()==0){
-                //usePerformanceAsVitalAdvantgeCheck.setSelected(true);
-                useNeuronDensityAsVitalAdvantgeCheck.setEnabled(false);
-                useCalculationEficiencyAsVitalAdvantgeCheck.setEnabled(false);
-            }else if(optimizationMethodUsedComboBox.getSelectedIndex()==1){
-                useNeuronDensityAsVitalAdvantgeCheck.setEnabled(true);
-                useCalculationEficiencyAsVitalAdvantgeCheck.setEnabled(true);
-            }
-        });
+//        optimizationMethodUsedComboBox.addActionListener((ActionEvent ae)->{
+//            if(optimizationMethodUsedComboBox.getSelectedIndex()==0){
+//                //usePerformanceAsVitalAdvantgeCheck.setSelected(true);
+//                useNeuronDensityAsVitalAdvantgeCheck.setEnabled(false);
+//                useCalculationEficiencyAsVitalAdvantgeCheck.setEnabled(false);
+//            }else if(optimizationMethodUsedComboBox.getSelectedIndex()==1){
+//                useNeuronDensityAsVitalAdvantgeCheck.setEnabled(true);
+//                useCalculationEficiencyAsVitalAdvantgeCheck.setEnabled(true);
+//            }
+//        });
         survivalRateValueTextField.addActionListener((ActionEvent ae)->{
             _controlValueChanged(survivalRateValueTextField, 0, 100, true);
         });

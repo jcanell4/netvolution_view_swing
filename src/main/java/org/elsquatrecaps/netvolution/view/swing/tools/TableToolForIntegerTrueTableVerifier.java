@@ -24,7 +24,7 @@ public class TableToolForIntegerTrueTableVerifier {
 //    public static JTable createJTableFromDataEstructure
     
     public static TableModel createTableModelForIORSTrueTableVerifier(boolean ed){
-        return new TableModelForIORTrueTableVerifier(ed);
+        return new TableModelForIORSTrueTableVerifier(ed);
     }
     
     public static TableModel createTableModelForIORTrueTableVerifier(boolean ed){
@@ -36,7 +36,7 @@ public class TableToolForIntegerTrueTableVerifier {
     }
     
     public static TableModel createTableModelForIORSTrueTableVerifier(int i, int o, boolean ed){
-        return new TableModelForIORTrueTableVerifier(i, o, ed);
+        return new TableModelForIORSTrueTableVerifier(i, o, ed);
     }
     
     public static TableModel createTableModelForIORTrueTableVerifier(int i, int o, boolean ed){
@@ -48,7 +48,10 @@ public class TableToolForIntegerTrueTableVerifier {
     }
     
     public static void updateTableFromEstructure(List<Map<String,List<Float>>> dataStructure, JTable table){
-        if(table.getModel() instanceof TableModelForIORTrueTableVerifier){
+        if(table.getModel() instanceof TableModelForIORSTrueTableVerifier){
+            updateTableFromEstructureIORS(dataStructure, table);
+            updateColumnWidthForIORSModel(table);
+        }else if(table.getModel() instanceof TableModelForIORTrueTableVerifier){
             updateTableFromEstructureIOR(dataStructure, table);
         }else if(table.getModel() instanceof TableModelForIOTrueTableVerifier){
             updateTableFromEstructureIO(dataStructure, table);
@@ -56,6 +59,32 @@ public class TableToolForIntegerTrueTableVerifier {
         TableModelForIOTrueTableVerifier model = (TableModelForIOTrueTableVerifier) table.getModel();
         model.dataStructure = dataStructure;
         model.fireTableDataChanged();
+    }
+    
+    public static void updateColumnWidth(JTable table){
+        if(table.getModel() instanceof TableModelForIORSTrueTableVerifier){
+            updateColumnWidthForIORSModel(table);
+        }
+    }
+    
+    private static void updateColumnWidthForIORSModel(JTable table){
+        int witdhForColumns;
+        int minWitdhForColumns = 25;
+        int widthForSumColumn = 120;
+        int w = table.getParent().getWidth();
+        witdhForColumns = (w-widthForSumColumn)/(table.getColumnCount()-1);
+        if(witdhForColumns<minWitdhForColumns){
+            widthForSumColumn = w-minWitdhForColumns*(table.getColumnCount()-1);
+            witdhForColumns = minWitdhForColumns;
+        }
+        for(int i=0; i<table.getColumnCount(); i++){
+             TableColumn tc = table.getColumnModel().getColumn(i);
+             if(i<table.getColumnCount()-1){
+                 tc.setPreferredWidth(witdhForColumns);
+             }else{
+                 tc.setPreferredWidth(widthForSumColumn);
+             }
+        }
     }
     
     private static TableColumn createNewTableColumn(int modelIndex, int l1, int l2, int l3, boolean editable, boolean floatEditor){
@@ -285,10 +314,10 @@ public class TableToolForIntegerTrueTableVerifier {
                 int nc = c-inputsLength;
                 ret=getDataStructure().get(r).get("O").get(nc).intValue();                
             }else if(c<inputsLength+outputsLength+outputsLength){
-                int nc = c-inputsLength-outputsLength-outputsLength;
+                int nc = c-inputsLength-outputsLength;
                 ret=getDataStructure().get(r).get("R").get(nc).intValue();
             }else{
-                int nc = c-inputsLength-outputsLength-outputsLength-outputsLength;
+                int nc = c-inputsLength-outputsLength-outputsLength;
                 ret=getDataStructure().get(r).get("S").get(nc);
             }
             return ret;

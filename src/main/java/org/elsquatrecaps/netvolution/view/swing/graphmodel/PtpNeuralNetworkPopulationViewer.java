@@ -14,6 +14,7 @@ import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.calculators.PtpNeura
 import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.calculators.PtpNeuralNetworkTrueTableGlobalCalculator;
 import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.PtpNeuralNetwork;
 import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.PtpNeuron;
+import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.actfunctions.SigmoidActivationFunction;
 
 /**
  *
@@ -66,7 +67,8 @@ public class PtpNeuralNetworkPopulationViewer {
     private NeuralNetworkInformationSheet getNetworkInformationSheet(int id, PtpNeuralNetwork nn){
         NeuralNetworkInformationSheet ret;
         PtpNeuralNetworkTrueTableGlobalCalculator.PerformaceAndReproductiveAdvantage calc = getCalculator().calculate(nn);
-        double performanece = calc.getPerformace().doubleValue();
+        double performanece = calc.getPerformance().doubleValue();
+        double toOrder = calc.getReproductiveAdvantage().doubleValue();
         double eficiency = getEficiencyCalculator().calculate(nn).doubleValue();
         double density = getNeuronDensityCalculator().calculate(nn).doubleValue();
         int[] fbConnections = calculateConections(nn);
@@ -80,9 +82,16 @@ public class PtpNeuralNetworkPopulationViewer {
                 fbConnections[1], 
                 eficiency, 
                 0, 
-                performanece);
+                performanece,
+                toOrder);
         updateResults(nn, ret);
+        ret.setTextualView(nn.toString());
+        updateBiasAndBeta(nn, ret);
         return ret;
+    }
+    
+    private void updateBiasAndBeta(PtpNeuralNetwork nn, NeuralNetworkInformationSheet info){
+        info.addBiasAndBetaValues(nn);
     }
     
     private void updateResults(PtpNeuralNetwork nn, NeuralNetworkInformationSheet info){
@@ -113,8 +122,8 @@ public class PtpNeuralNetworkPopulationViewer {
         Arrays.sort(getPopulationIndex(), new Comparator<Integer>() {
             @Override
             public int compare(Integer t1, Integer t2) {
-                int ret = Double.compare(getPopulationInfo()[t1].getPerformance(),
-                    getPopulationInfo()[t2].getPerformance()
+                int ret = Double.compare(getPopulationInfo()[t1].getValueToOrdering(),
+                    getPopulationInfo()[t2].getValueToOrdering()
                 );
                 return ret;
             }
