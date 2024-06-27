@@ -226,12 +226,22 @@ public class NeuralNetworkInformationSheet {
         float biasAcum = 0;
         float betaAcum = 0;
         for(int i=0; i<11; i++){
-            biasList.add(0);
-            betaList.add(0);
-            biasIntervals.add(String.format("%3.1f-%3.1f", biasAcum, biasAcum+biasInterval));
-            biasAcum +=biasInterval;
-            betaIntervals.add(String.format("%3.1f-%3.1f", betaAcum, betaAcum+betaInterval));
-            betaAcum+=betaInterval;
+            if(biasInterval!=0){
+                biasIntervals.add(String.format("%3.1f-%3.1f", biasAcum, biasAcum+biasInterval));
+                biasAcum +=biasInterval;
+                biasList.add(0);
+            }else if(biasInterval==0 && i==0){
+                biasIntervals.add(String.format("%3.1f-%3.1f", biasAcum, biasAcum+biasInterval));
+                biasList.add(0);
+            }
+            if(betaInterval!=0){
+                betaIntervals.add(String.format("%3.1f-%3.1f", betaAcum, betaAcum+betaInterval));
+                betaAcum+=betaInterval;
+                betaList.add(0);
+            }else if(betaInterval==0 && i==0){
+                betaIntervals.add(String.format("%3.1f-%3.1f", betaAcum, betaAcum+betaInterval));
+                betaList.add(0);
+            }
         }
         for(PtpNeuron n: nn.getNeurons()){
             int pos = (int) ((n.getBias()-minBias)/biasInterval);

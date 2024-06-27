@@ -14,7 +14,6 @@ import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.calculators.PtpNeura
 import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.calculators.PtpNeuralNetworkTrueTableGlobalCalculator;
 import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.PtpNeuralNetwork;
 import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.PtpNeuron;
-import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.actfunctions.SigmoidActivationFunction;
 
 /**
  *

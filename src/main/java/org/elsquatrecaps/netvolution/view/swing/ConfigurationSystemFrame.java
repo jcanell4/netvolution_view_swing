@@ -1549,9 +1549,9 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
         // TODO add your handling code here:
         updateConfigWithGuiData();
-        if(this.getSharedData().frames.containsKey(CntFrames.EVOLUTION_PROCESS)){
-            this.getSharedData().frames.remove(CntFrames.EVOLUTION_PROCESS, this.getSharedData().frames.get(CntFrames.EVOLUTION_PROCESS));
-        }
+//        if(this.getSharedData().frames.containsKey(CntFrames.EVOLUTION_PROCESS)){
+//            this.getSharedData().frames.remove(CntFrames.EVOLUTION_PROCESS, this.getSharedData().frames.get(CntFrames.EVOLUTION_PROCESS));
+//        }
         this.getMenuEvents().createAndShowEvolutionaryProcessFrame(this.getSharedData(), this.getActivationFunctionInstanceSelected(), false);
         this.setVisible(false);        
         
