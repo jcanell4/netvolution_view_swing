@@ -32,11 +32,15 @@ public class NeuralNetworkInformationSheet {
     private final double performance;
     private final double valueToOrdering;
     private String textualView="";    
-    private ArrayList<Map<String,List<Float>>> resultsFromValueTable = new ArrayList<>();
-    private List<Integer> biasList = new ArrayList<>();
-    private List<String>  biasIntervals = new ArrayList<>();
-    private List<String> betaIntervals  = new ArrayList<>();
-    private List<Integer> betaList = new ArrayList<>();
+    private final ArrayList<Map<String,List<Float>>> resultsFromValueTable = new ArrayList<>();
+    private final List<Integer> biasList = new ArrayList<>();
+    private final List<Integer> gostBiasList = new ArrayList<>();
+    private final List<Integer> realBiasList = new ArrayList<>();
+    private final List<String>  biasIntervals = new ArrayList<>();
+    private final List<String> betaIntervals  = new ArrayList<>();
+    private final List<Integer> betaList = new ArrayList<>();
+    private final List<Integer> gostBetaList = new ArrayList<>();
+    private final List<Integer> realBetaList = new ArrayList<>();
 
     public NeuralNetworkInformationSheet(String id, int inputNeurons, int connectionsLength, int outpuNeurons, double neuronDensityIndex, int forwardConnections, int backwardConnections, double calculationEficiencyIndex, double activationFunctionLinearityDegree, double performance, double valueToOrdering) {
         this.id = id;
@@ -223,31 +227,74 @@ public class NeuralNetworkInformationSheet {
         }
         float biasInterval = (maxBias-minBias)/10;
         float betaInterval = (maxBeta-minBeta)/10;
-        float biasAcum = 0;
-        float betaAcum = 0;
+        float biasAcum = minBias;
+        float betaAcum = minBeta;
         for(int i=0; i<11; i++){
             if(biasInterval!=0){
                 biasIntervals.add(String.format("%3.1f-%3.1f", biasAcum, biasAcum+biasInterval));
                 biasAcum +=biasInterval;
                 biasList.add(0);
+                realBiasList.add(0);
+                gostBiasList.add(0);                
             }else if(biasInterval==0 && i==0){
                 biasIntervals.add(String.format("%3.1f-%3.1f", biasAcum, biasAcum+biasInterval));
                 biasList.add(0);
+                realBiasList.add(0);
+                gostBiasList.add(0);
             }
             if(betaInterval!=0){
                 betaIntervals.add(String.format("%3.1f-%3.1f", betaAcum, betaAcum+betaInterval));
                 betaAcum+=betaInterval;
                 betaList.add(0);
+                realBetaList.add(0);
+                gostBetaList.add(0);
             }else if(betaInterval==0 && i==0){
                 betaIntervals.add(String.format("%3.1f-%3.1f", betaAcum, betaAcum+betaInterval));
                 betaList.add(0);
+                realBetaList.add(0);
+                gostBetaList.add(0);
             }
         }
         for(PtpNeuron n: nn.getNeurons()){
-            int pos = (int) ((n.getBias()-minBias)/biasInterval);
-            biasList.set(pos, biasList.get(pos) + 1);
-            pos = (int) ((((SigmoidActivationFunction)n.getActivationFunction()).getBeta()-minBeta)/betaInterval);
-            betaList.set(pos, betaList.get(pos) + 1);
+            int posBias = (int) ((n.getBias()-minBias)/biasInterval);
+            int posBeta = (int) ((((SigmoidActivationFunction)n.getActivationFunction()).getBeta()-minBeta)/betaInterval);
+            if(n.isParticipatingInCalculation()){
+                realBiasList.set(posBias, realBiasList.get(posBias) + 1);
+                realBetaList.set(posBeta, realBetaList.get(posBeta) + 1);
+            }else{
+                gostBiasList.set(posBias, gostBiasList.get(posBias) + 1);
+                gostBetaList.set(posBeta, gostBetaList.get(posBeta) + 1);
+            }
+            biasList.set(posBias, biasList.get(posBias) + 1);
+            betaList.set(posBeta, betaList.get(posBeta) + 1);
         }        
+    }
+
+    /**
+     * @return the gostBiasList
+     */
+    public List<Integer> getGhostBiasList() {
+        return gostBiasList;
+    }
+
+    /**
+     * @return the realBiasList
+     */
+    public List<Integer> getRealBiasList() {
+        return realBiasList;
+    }
+
+    /**
+     * @return the gostBetaList
+     */
+    public List<Integer> getGhostBetaList() {
+        return gostBetaList;
+    }
+
+    /**
+     * @return the realBetaList
+     */
+    public List<Integer> getRealBetaList() {
+        return realBetaList;
     }
 }

@@ -855,7 +855,7 @@
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                       <SubComponents>
-                        <Component class="javax.swing.JTextPane" name="agentTextualViewTextPane1">
+                        <Component class="javax.swing.JTextPane" name="initialAgentTextualViewTextPane">
                         </Component>
                       </SubComponents>
                     </Container>
@@ -1528,7 +1528,7 @@
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                       <SubComponents>
-                        <Component class="javax.swing.JTextPane" name="agentTextualViewTextPane">
+                        <Component class="javax.swing.JTextPane" name="finalAgentTextualViewTextPane">
                         </Component>
                       </SubComponents>
                     </Container>

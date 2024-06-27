@@ -85,10 +85,14 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         DefaultCategoryDataset datasetBias = new DefaultCategoryDataset();     
         DefaultCategoryDataset datasetBeta = new DefaultCategoryDataset();     
         for(int i=0; i<initialPopViewer.getInformationSheet().getBiasList().size(); i++){
-            datasetBias.setValue(initialPopViewer.getInformationSheet().getBiasList().get(i), "frequency",  initialPopViewer.getInformationSheet().getBiasIntervals().get(i));           
+            datasetBias.setValue(initialPopViewer.getInformationSheet().getBiasList().get(i), "Bias frequency",  initialPopViewer.getInformationSheet().getBiasIntervals().get(i));           
+            datasetBias.setValue(initialPopViewer.getInformationSheet().getRealBiasList().get(i), "Real Bias frequency",  initialPopViewer.getInformationSheet().getBiasIntervals().get(i));           
+            datasetBias.setValue(initialPopViewer.getInformationSheet().getGhostBiasList().get(i), "Ghost Bias frequency",  initialPopViewer.getInformationSheet().getBiasIntervals().get(i));           
         }
         for(int i=0; i<initialPopViewer.getInformationSheet().getBetaList().size(); i++){
-            datasetBeta.setValue(initialPopViewer.getInformationSheet().getBetaList().get(i), "frequency",  initialPopViewer.getInformationSheet().getBetaIntervals().get(i));           
+            datasetBeta.setValue(initialPopViewer.getInformationSheet().getBetaList().get(i), "Beta frequency",  initialPopViewer.getInformationSheet().getBetaIntervals().get(i));           
+            datasetBeta.setValue(initialPopViewer.getInformationSheet().getRealBetaList().get(i), "Real Beta frequency",  initialPopViewer.getInformationSheet().getBetaIntervals().get(i));           
+            datasetBeta.setValue(initialPopViewer.getInformationSheet().getGhostBetaList().get(i), "Ghost Beta frequency",  initialPopViewer.getInformationSheet().getBetaIntervals().get(i));           
         }
         JFreeChart chartBias = ChartFactory.createBarChart("Bias distribution", "Interval values", "Frequency", datasetBias);
         ChartPanel viewerBias = new ChartPanel(chartBias);
@@ -108,9 +112,13 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         DefaultCategoryDataset datasetBeta = new DefaultCategoryDataset();     
         for(int i=0; i<finalPopViewer.getInformationSheet().getBiasList().size(); i++){
             datasetBias.setValue(finalPopViewer.getInformationSheet().getBiasList().get(i), "frequency",  finalPopViewer.getInformationSheet().getBiasIntervals().get(i));           
+            datasetBias.setValue(finalPopViewer.getInformationSheet().getRealBiasList().get(i), "Real Bias frequency",  finalPopViewer.getInformationSheet().getBiasIntervals().get(i));           
+            datasetBias.setValue(finalPopViewer.getInformationSheet().getGhostBiasList().get(i), "Ghost Bias frequency",  finalPopViewer.getInformationSheet().getBiasIntervals().get(i));           
         }
         for(int i=0; i<finalPopViewer.getInformationSheet().getBetaList().size(); i++){
             datasetBeta.setValue(finalPopViewer.getInformationSheet().getBetaList().get(i), "frequency",  finalPopViewer.getInformationSheet().getBetaIntervals().get(i));           
+            datasetBeta.setValue(finalPopViewer.getInformationSheet().getRealBetaList().get(i), "Real Beta frequency",  finalPopViewer.getInformationSheet().getBetaIntervals().get(i));           
+            datasetBeta.setValue(finalPopViewer.getInformationSheet().getGhostBetaList().get(i), "Ghost Beta frequency",  finalPopViewer.getInformationSheet().getBetaIntervals().get(i));           
         }
         JFreeChart chartBias = ChartFactory.createBarChart("Bias distribution", "Interval values", "Frequency", datasetBias);
         chartBias.getCategoryPlot().getDomainAxis().setCategoryLabelPositions(CategoryLabelPositions.UP_45);
@@ -188,6 +196,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         this.activationFunctionLinearityTextField.setText(String.format("%6.4f", info.getActivationFunctionLinearityDegree()));
         this.performanceTextField.setText(String.format("%6.4f", info.getPerformance()));
         TableToolForIntegerTrueTableVerifier.updateTableFromEstructure(info.getResultsFromValueTable(), initPopVerifierTable);
+        this.initialAgentTextualViewTextPane.setText(info.getTextualView());
         // Añadir el grafo a un componente Swing
         mxGraph graph = initialPopViewer.getGraph();
         mxGraphComponent graphComponent = new mxGraphComponent(graph);
@@ -224,7 +233,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         this.activationFunctionLinearityTextField1.setText(String.format("%6.4f", info.getActivationFunctionLinearityDegree()));
         this.performanceTextField1.setText(String.format("%6.4f", info.getPerformance()));        
         TableToolForIntegerTrueTableVerifier.updateTableFromEstructure(info.getResultsFromValueTable(), endPopVerifierTable);        
-        this.agentTextualViewTextPane.setText(info.getTextualView());
+        this.finalAgentTextualViewTextPane.setText(info.getTextualView());
         // Añadir el grafo a un componente Swing
         mxGraph graph = finalPopViewer.getGraph();
         mxGraphComponent graphComponent = new mxGraphComponent(graph);
@@ -346,7 +355,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         jScrollPane5 = new javax.swing.JScrollPane();
         initPopVerifierTable = new javax.swing.JTable();
         initialAgentTextualViewScrollPane = new javax.swing.JScrollPane();
-        agentTextualViewTextPane1 = new javax.swing.JTextPane();
+        initialAgentTextualViewTextPane = new javax.swing.JTextPane();
         initialBiasPanelGraph = new javax.swing.JPanel();
         initialBetaPanelGraph = new javax.swing.JPanel();
         initialGraphScrollPane = new javax.swing.JScrollPane();
@@ -388,7 +397,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         jScrollPane6 = new javax.swing.JScrollPane();
         endPopVerifierTable = new javax.swing.JTable();
         finalAgentTextualViewScrollPane = new javax.swing.JScrollPane();
-        agentTextualViewTextPane = new javax.swing.JTextPane();
+        finalAgentTextualViewTextPane = new javax.swing.JTextPane();
         finalBiasPanelGraph = new javax.swing.JPanel();
         finalBetaPanelGraph = new javax.swing.JPanel();
         finalGraphScrollPane = new javax.swing.JScrollPane();
@@ -778,7 +787,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
 
         jTabbedPane2.addTab("Agent properties", initialAgentPropertiesScrollPane);
 
-        initialAgentTextualViewScrollPane.setViewportView(agentTextualViewTextPane1);
+        initialAgentTextualViewScrollPane.setViewportView(initialAgentTextualViewTextPane);
 
         jTabbedPane2.addTab("Agent textual view", initialAgentTextualViewScrollPane);
 
@@ -1144,7 +1153,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
 
         jTabbedPane1.addTab("Agent properties", finalAgentPropertiesScrollPane);
 
-        finalAgentTextualViewScrollPane.setViewportView(agentTextualViewTextPane);
+        finalAgentTextualViewScrollPane.setViewportView(finalAgentTextualViewTextPane);
 
         jTabbedPane1.addTab("Agent textual view", finalAgentTextualViewScrollPane);
 
@@ -1673,8 +1682,6 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
     private javax.swing.JTextField activationFunctionLinearityTextField1;
     private javax.swing.JTextField agentIdTextField;
     private javax.swing.JTextField agentIdTextFieldFinal;
-    private javax.swing.JTextPane agentTextualViewTextPane;
-    private javax.swing.JTextPane agentTextualViewTextPane1;
     private javax.swing.JTextField calculationEficiencyTextField;
     private javax.swing.JTextField calculationEficiencyTextField1;
     private javax.swing.JMenuItem cancelEvolveProcessMenuItem;
@@ -1684,6 +1691,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
     private javax.swing.JMenu fileMenu;
     private javax.swing.JScrollPane finalAgentPropertiesScrollPane;
     private javax.swing.JScrollPane finalAgentTextualViewScrollPane;
+    private javax.swing.JTextPane finalAgentTextualViewTextPane;
     private javax.swing.JPanel finalBetaPanelGraph;
     private javax.swing.JPanel finalBiasPanelGraph;
     private javax.swing.JPanel finalGraphPanel;
@@ -1692,6 +1700,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
     private javax.swing.JTable initPopVerifierTable;
     private javax.swing.JScrollPane initialAgentPropertiesScrollPane;
     private javax.swing.JScrollPane initialAgentTextualViewScrollPane;
+    private javax.swing.JTextPane initialAgentTextualViewTextPane;
     private javax.swing.JPanel initialBetaPanelGraph;
     private javax.swing.JPanel initialBiasPanelGraph;
     private javax.swing.JPanel initialGraphPanel;
