@@ -103,25 +103,25 @@ public class TableToolForIntegerTrueTableVerifier {
                 if(column<l1){
                     l.setBackground(Color.WHITE);
                     l.setForeground(Color.BLACK);
-                }else if(column>l2){
+                }else if(l3>0 && column>=l3){
+                    l.setBackground(Color.LIGHT_GRAY);
+                    l.setForeground(Color.BLACK);
+                }else if(l2>0 == column>=l2){
                     l.setBackground(Color.PINK);
                     l.setForeground(Color.RED);
-                }else if(column>l3){
+                }else{
                     l.setBackground(Color.GRAY);
                     l.setForeground(Color.WHITE);
-                }else{
-                    l.setBackground(Color.WHITE);
-                    l.setForeground(Color.GRAY);
                 }
                 return l;
             }
         });
         if(modelIndex<l1){
             ret.setHeaderValue(String.format("I%d", modelIndex+1));
-        }else if(modelIndex>l2){
-            ret.setHeaderValue(String.format("R%d", modelIndex-l2+1));
-        }else if(modelIndex>l3){
+        }else if(modelIndex>=l3){
             ret.setHeaderValue(String.format("S%d", modelIndex-l3+1));
+        }else if(modelIndex>=l2){
+            ret.setHeaderValue(String.format("R%d", modelIndex-l2+1));
         }else{
             ret.setHeaderValue(String.format("O%d", modelIndex-l1+1));
         }
@@ -140,6 +140,8 @@ public class TableToolForIntegerTrueTableVerifier {
         boolean editable =  ((TableModelForIOTrueTableVerifier) table.getModel()).editable;
         int responseLength = outputsLength;
         int sumLength = outputsLength;
+        int ilObjective = dataStructure.get(0).get("I").size();
+        int olObjective = dataStructure.get(0).get("O").size();
         if(inputsLength>dataStructure.get(0).get("I").size()){
             //delete inputs
             for(int i=inputsLength-1; i>=dataStructure.get(0).get("I").size(); i--){
@@ -148,9 +150,8 @@ public class TableToolForIntegerTrueTableVerifier {
             }
             ((TableModelForIOTrueTableVerifier) table.getModel()).inputsLength = inputsLength;
         }else{
-            int ilObjective = dataStructure.get(0).get("I").size();
             for(int i=inputsLength; i<ilObjective; i++){
-                TableColumn tc = createNewTableColumn(i, ilObjective, -1, -1, editable, false);
+                TableColumn tc = createNewTableColumn(i, ilObjective, ilObjective+olObjective, ilObjective+olObjective+olObjective, editable, false);
                 table.addColumn(tc);
                 inputsLength++;
             }
@@ -164,9 +165,8 @@ public class TableToolForIntegerTrueTableVerifier {
             }            
             ((TableModelForIOTrueTableVerifier) table.getModel()).outputsLength = outputsLength;
         }else{
-            int olObjective = dataStructure.get(0).get("O").size();
             for(int i=outputsLength; i<olObjective; i++){
-                TableColumn tc = createNewTableColumn(i+inputsLength, inputsLength, inputsLength+olObjective, -1, editable, false);
+                TableColumn tc = createNewTableColumn(i+inputsLength, inputsLength, inputsLength+olObjective, inputsLength+olObjective+olObjective, editable, false);
                 table.addColumn(tc);
                 outputsLength++;
             }
@@ -205,6 +205,8 @@ public class TableToolForIntegerTrueTableVerifier {
         int outputsLength = ((TableModelForIOTrueTableVerifier) table.getModel()).outputsLength;
         boolean editable =  ((TableModelForIOTrueTableVerifier) table.getModel()).editable;
         int responseLength = outputsLength;
+        int ilObjective = dataStructure.get(0).get("I").size();
+        int olObjective = dataStructure.get(0).get("O").size();
         if(inputsLength>dataStructure.get(0).get("I").size()){
             //delete inputs
             for(int i=inputsLength-1; i>=dataStructure.get(0).get("I").size(); i--){
@@ -213,9 +215,8 @@ public class TableToolForIntegerTrueTableVerifier {
             }
             ((TableModelForIOTrueTableVerifier) table.getModel()).inputsLength = inputsLength;
         }else{
-            int ilObjective = dataStructure.get(0).get("I").size();
             for(int i=inputsLength; i<ilObjective; i++){
-                TableColumn tc = createNewTableColumn(i, ilObjective, -1, -1, editable, false);
+                TableColumn tc = createNewTableColumn(i, ilObjective, ilObjective+olObjective, ilObjective+olObjective+olObjective, editable, false);
                 table.addColumn(tc);
                 inputsLength++;
             }
@@ -229,7 +230,6 @@ public class TableToolForIntegerTrueTableVerifier {
             }            
             ((TableModelForIOTrueTableVerifier) table.getModel()).outputsLength = outputsLength;
         }else{
-            int olObjective = dataStructure.get(0).get("O").size();
             for(int i=outputsLength; i<olObjective; i++){
                 TableColumn tc = createNewTableColumn(i+inputsLength, inputsLength, inputsLength+olObjective, -1, editable, false);
                 table.addColumn(tc);
