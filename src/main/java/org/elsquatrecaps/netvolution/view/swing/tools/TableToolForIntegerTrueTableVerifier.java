@@ -116,6 +116,16 @@ public class TableToolForIntegerTrueTableVerifier {
                 return l;
             }
         });
+        if(modelIndex<l1){
+            ret.setHeaderValue(String.format("I%d", modelIndex+1));
+        }else if(modelIndex>l2){
+            ret.setHeaderValue(String.format("R%d", modelIndex-l2+1));
+        }else if(modelIndex>l3){
+            ret.setHeaderValue(String.format("S%d", modelIndex-l3+1));
+        }else{
+            ret.setHeaderValue(String.format("O%d", modelIndex-l1+1));
+        }
+        
         if(editable && floatEditor){
             ret.setCellEditor(new FloatCellEditor(new JTextField()));
         }else if(editable){
@@ -138,8 +148,9 @@ public class TableToolForIntegerTrueTableVerifier {
             }
             ((TableModelForIOTrueTableVerifier) table.getModel()).inputsLength = inputsLength;
         }else{
-            for(int i=inputsLength; i<dataStructure.get(0).get("I").size(); i++){
-                TableColumn tc = createNewTableColumn(i, inputsLength, -1, -1, editable, false);
+            int ilObjective = dataStructure.get(0).get("I").size();
+            for(int i=inputsLength; i<ilObjective; i++){
+                TableColumn tc = createNewTableColumn(i, ilObjective, -1, -1, editable, false);
                 table.addColumn(tc);
                 inputsLength++;
             }
@@ -153,8 +164,9 @@ public class TableToolForIntegerTrueTableVerifier {
             }            
             ((TableModelForIOTrueTableVerifier) table.getModel()).outputsLength = outputsLength;
         }else{
-            for(int i=outputsLength; i<dataStructure.get(0).get("O").size(); i++){
-                TableColumn tc = createNewTableColumn(i, inputsLength, -1, -1, editable, false);
+            int olObjective = dataStructure.get(0).get("O").size();
+            for(int i=outputsLength; i<olObjective; i++){
+                TableColumn tc = createNewTableColumn(i+inputsLength, inputsLength, inputsLength+olObjective, -1, editable, false);
                 table.addColumn(tc);
                 outputsLength++;
             }
@@ -167,8 +179,8 @@ public class TableToolForIntegerTrueTableVerifier {
                 responseLength--;
             }            
         }else{
-            for(int i=inputsLength+outputsLength+responseLength-1; i<dataStructure.get(0).get("R").size(); i++){
-                TableColumn tc = createNewTableColumn(i, inputsLength, inputsLength+outputsLength, -1, editable, false);
+            for(int i=responseLength; i<dataStructure.get(0).get("R").size(); i++){
+                TableColumn tc = createNewTableColumn(i+inputsLength+outputsLength, inputsLength, inputsLength+outputsLength, inputsLength+outputsLength+outputsLength, editable, false);
                 table.addColumn(tc);
                 responseLength++;
             }
@@ -180,8 +192,8 @@ public class TableToolForIntegerTrueTableVerifier {
                 responseLength--;
             }            
         }else{
-            for(int i=inputsLength+outputsLength+responseLength-1; i<dataStructure.get(0).get("S").size(); i++){
-                TableColumn tc = createNewTableColumn(i, inputsLength, inputsLength+outputsLength, -1, editable, true);
+            for(int i=sumLength; i<dataStructure.get(0).get("S").size(); i++){
+                TableColumn tc = createNewTableColumn(i+inputsLength+outputsLength+outputsLength, inputsLength, inputsLength+outputsLength, inputsLength+outputsLength+outputsLength, editable, true);
                 table.addColumn(tc);
                 responseLength++;
             }
@@ -201,8 +213,9 @@ public class TableToolForIntegerTrueTableVerifier {
             }
             ((TableModelForIOTrueTableVerifier) table.getModel()).inputsLength = inputsLength;
         }else{
-            for(int i=inputsLength; i<dataStructure.get(0).get("I").size(); i++){
-                TableColumn tc = createNewTableColumn(i, inputsLength, -1, -1, editable, false);
+            int ilObjective = dataStructure.get(0).get("I").size();
+            for(int i=inputsLength; i<ilObjective; i++){
+                TableColumn tc = createNewTableColumn(i, ilObjective, -1, -1, editable, false);
                 table.addColumn(tc);
                 inputsLength++;
             }
@@ -216,8 +229,9 @@ public class TableToolForIntegerTrueTableVerifier {
             }            
             ((TableModelForIOTrueTableVerifier) table.getModel()).outputsLength = outputsLength;
         }else{
-            for(int i=outputsLength; i<dataStructure.get(0).get("O").size(); i++){
-                TableColumn tc = createNewTableColumn(i, inputsLength, -1, -1, editable, false);
+            int olObjective = dataStructure.get(0).get("O").size();
+            for(int i=outputsLength; i<olObjective; i++){
+                TableColumn tc = createNewTableColumn(i+inputsLength, inputsLength, inputsLength+olObjective, -1, editable, false);
                 table.addColumn(tc);
                 outputsLength++;
             }
@@ -230,8 +244,8 @@ public class TableToolForIntegerTrueTableVerifier {
                 responseLength--;
             }            
         }else{
-            for(int i=inputsLength+outputsLength+responseLength-1; i<dataStructure.get(0).get("R").size(); i++){
-                TableColumn tc = createNewTableColumn(i, inputsLength, inputsLength+outputsLength, -1, editable, false);
+            for(int i=responseLength; i<dataStructure.get(0).get("R").size(); i++){
+                TableColumn tc = createNewTableColumn(i+inputsLength+outputsLength, inputsLength, inputsLength+outputsLength, -1, editable, false);
                 table.addColumn(tc);
                 responseLength++;
             }
@@ -265,8 +279,9 @@ public class TableToolForIntegerTrueTableVerifier {
             }            
             ((TableModelForIOTrueTableVerifier) table.getModel()).outputsLength = outputsLength;
         }else{
-            for(int i=outputsLength; i<dataStructure.get(0).get("O").size(); i++){
-                TableColumn tc = createNewTableColumn(i, inputsLength, -1, -1, editable, false);
+            int olObjective = dataStructure.get(0).get("O").size();
+            for(int i=outputsLength; i<olObjective; i++){
+                TableColumn tc = createNewTableColumn(i+inputsLength, inputsLength, -1, -1, editable, false);
                 table.addColumn(tc);
                 outputsLength++;
             }

@@ -678,7 +678,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        initPopVerifierTable.setModel(TableToolForIntegerTrueTableVerifier.createTableModelForIORSTrueTableVerifier(2,1,false));
+        initPopVerifierTable.setModel(TableToolForIntegerTrueTableVerifier.createTableModelForIORSTrueTableVerifier(0,0,false));
         jScrollPane5.setViewportView(initPopVerifierTable);
 
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
@@ -1045,7 +1045,7 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        endPopVerifierTable.setModel(TableToolForIntegerTrueTableVerifier.createTableModelForIORSTrueTableVerifier(2,1,false));
+        endPopVerifierTable.setModel(TableToolForIntegerTrueTableVerifier.createTableModelForIORSTrueTableVerifier(0,0,false));
         jScrollPane6.setViewportView(endPopVerifierTable);
 
         javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
