@@ -111,12 +111,12 @@ public class PopulationDetailFrame extends NetvolutionBasicFrame{
         DefaultCategoryDataset datasetBias = new DefaultCategoryDataset();     
         DefaultCategoryDataset datasetBeta = new DefaultCategoryDataset();     
         for(int i=0; i<finalPopViewer.getInformationSheet().getBiasList().size(); i++){
-            datasetBias.setValue(finalPopViewer.getInformationSheet().getBiasList().get(i), "frequency",  finalPopViewer.getInformationSheet().getBiasIntervals().get(i));           
+            datasetBias.setValue(finalPopViewer.getInformationSheet().getBiasList().get(i), "Bias frequency",  finalPopViewer.getInformationSheet().getBiasIntervals().get(i));           
             datasetBias.setValue(finalPopViewer.getInformationSheet().getRealBiasList().get(i), "Real Bias frequency",  finalPopViewer.getInformationSheet().getBiasIntervals().get(i));           
             datasetBias.setValue(finalPopViewer.getInformationSheet().getGhostBiasList().get(i), "Ghost Bias frequency",  finalPopViewer.getInformationSheet().getBiasIntervals().get(i));           
         }
         for(int i=0; i<finalPopViewer.getInformationSheet().getBetaList().size(); i++){
-            datasetBeta.setValue(finalPopViewer.getInformationSheet().getBetaList().get(i), "frequency",  finalPopViewer.getInformationSheet().getBetaIntervals().get(i));           
+            datasetBeta.setValue(finalPopViewer.getInformationSheet().getBetaList().get(i), "Beta frequency",  finalPopViewer.getInformationSheet().getBetaIntervals().get(i));           
             datasetBeta.setValue(finalPopViewer.getInformationSheet().getRealBetaList().get(i), "Real Beta frequency",  finalPopViewer.getInformationSheet().getBetaIntervals().get(i));           
             datasetBeta.setValue(finalPopViewer.getInformationSheet().getGhostBetaList().get(i), "Ghost Beta frequency",  finalPopViewer.getInformationSheet().getBetaIntervals().get(i));           
         }
