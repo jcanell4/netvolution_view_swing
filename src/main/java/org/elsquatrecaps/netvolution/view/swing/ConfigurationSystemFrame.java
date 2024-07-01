@@ -2195,6 +2195,9 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
         partialData = (ObjectNode) this.getJsonConfigData().get("evolutionarySystem").get("stopEvolutionProcessOn");
         partialData.put("minimumBestPerformance", ((double)this.minimumBestPerformanceValueSlider.getValue())/100);
         partialData.put("minimumAveragePerformance", ((double)this.minimumAveragePerformaceValueSlider.getValue())/100);
+        if(partialData.get("minimumAveragePerformance").asDouble()==1.0){
+            partialData.put("minimumAveragePerformance", 1.5);
+        }
         int v = this.maximumEvolutionaryCyclesValueSlider.getValue()*this.maximumCyclesToProcessFactorComboBox.getModel().getElementAt(this.maximumCyclesToProcessFactorComboBox.getSelectedIndex()).getValue();
         partialData.put("maximumCyclesToProcess", v);
         partialData = (ObjectNode) this.getJsonConfigData().get("evolutionarySystem").get("evolutionProcessConditions");

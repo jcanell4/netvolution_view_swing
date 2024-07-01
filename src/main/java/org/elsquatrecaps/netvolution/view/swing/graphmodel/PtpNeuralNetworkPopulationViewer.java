@@ -192,8 +192,10 @@ public class PtpNeuralNetworkPopulationViewer {
         for(int toNeuron=0; toNeuron<nn.getMaxNeuronsLength(); toNeuron++){
             for(int fromNeuron = 0; fromNeuron<nn.getMaxNeuronsLength(); fromNeuron++){
                 if(nn.getWeight(fromNeuron, toNeuron)!=0){
-                    cellsToPaint.set(fromNeuron, nn.getNeuron(fromNeuron).isParticipatingInCalculation());
-                    cellsToPaint.set(toNeuron, nn.getNeuron(toNeuron).isParticipatingInCalculation());
+//                    cellsToPaint.set(fromNeuron, nn.getNeuron(fromNeuron).isParticipatingInCalculation());
+//                    cellsToPaint.set(toNeuron, nn.getNeuron(toNeuron).isParticipatingInCalculation());
+                    cellsToPaint.set(fromNeuron, nn.getNeuron(fromNeuron).isPathToOutput());
+                    cellsToPaint.set(toNeuron, nn.getNeuron(toNeuron).isPathToOutput());
                 }
             }
         }
