@@ -145,8 +145,8 @@ public class TableToolForIntegerTrueTableVerifier {
         if(inputsLength>dataStructure.get(0).get("I").size()){
             //delete inputs
             for(int i=inputsLength-1; i>=dataStructure.get(0).get("I").size(); i--){
-                table.removeColumn(table.getColumnModel().getColumn(i));
                 inputsLength--;
+                table.removeColumn(table.getColumnModel().getColumn(inputsLength+outputsLength));
             }
             ((TableModelForIOTrueTableVerifier) table.getModel()).inputsLength = inputsLength;
         }else{
@@ -160,8 +160,8 @@ public class TableToolForIntegerTrueTableVerifier {
         if(outputsLength>dataStructure.get(0).get("O").size()){
             //delete outputs
             for(int i=inputsLength+outputsLength-1; i>=inputsLength+dataStructure.get(0).get("O").size(); i--){
-                table.removeColumn(table.getColumnModel().getColumn(i));
                 outputsLength--;
+                table.removeColumn(table.getColumnModel().getColumn(inputsLength+outputsLength));
             }            
             ((TableModelForIOTrueTableVerifier) table.getModel()).outputsLength = outputsLength;
         }else{

@@ -95,10 +95,12 @@ public class IntegerTableEditor extends AbstractDataAndEditorBuilder<List<Map<St
     public void updateTableByData(){
         if(inputsLength>this.getDataStructure().get(0).get("I").size()){
             //delete inputs
+            int il = inputsLength;
             for(int i=inputsLength-1; i>=this.getDataStructure().get(0).get("I").size(); i--){
-                table.removeColumn(table.getColumnModel().getColumn(i));
                 inputsLength--;
+                table.removeColumn(table.getColumnModel().getColumn(inputsLength+outputsLength));
             }
+            
         }else{
             for(int i=inputsLength; i<this.getDataStructure().get(0).get("I").size(); i++){
                 TableColumn tc = createNewTableColumn();
@@ -109,8 +111,8 @@ public class IntegerTableEditor extends AbstractDataAndEditorBuilder<List<Map<St
         if(outputsLength>this.getDataStructure().get(0).get("O").size()){
             //delete outputs
             for(int i=inputsLength+outputsLength-1; i>=inputsLength+this.getDataStructure().get(0).get("O").size(); i--){
-                table.removeColumn(table.getColumnModel().getColumn(i));
                 outputsLength--;
+                table.removeColumn(table.getColumnModel().getColumn(inputsLength+outputsLength));
             }            
         }else{
             for(int i=outputsLength; i<this.getDataStructure().get(0).get("O").size(); i++){
@@ -119,6 +121,7 @@ public class IntegerTableEditor extends AbstractDataAndEditorBuilder<List<Map<St
                 outputsLength++;
             }
         }
+        ((DefaultTableModel)table.getModel()).fireTableDataChanged();            
     }
     
     private static class IntegerCellEditor extends DefaultCellEditor {
