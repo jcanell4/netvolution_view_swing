@@ -13,6 +13,7 @@ public abstract class ConfigurationDataUpgrader {
         mapInstances = new HashMap<>();
         mapInstances.put("0.0.0.0", new ConfigurationDataUpgraderFrom0_0_0_0_to_0_0_0_1());
         mapInstances.put("0.0.0.1", new ConfigurationDataUpgraderFrom0_0_0_1_to_0_0_0_2());
+        mapInstances.put("0.0.0.2", new ConfigurationDataUpgraderFrom0_0_0_2_to_0_0_0_3());
     }
     
     public static ConfigurationDataUpgrader getInstanceUpgraderForOldVersion(String version){

@@ -15,7 +15,7 @@ import org.elsquatrecaps.netvolution.persistence.upgradeprocessors.Configuration
  * @author josep
  */
 public class ConfigurationDataFileManager {
-    public static String currentVersion="0.0.0.2";
+    public static String currentVersion="0.0.0.3";
     
     public static JsonNode getContent(String filename) throws IOException{
         File file = new File(filename);

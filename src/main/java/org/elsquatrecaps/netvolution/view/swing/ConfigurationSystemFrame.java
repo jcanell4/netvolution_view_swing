@@ -29,6 +29,7 @@ import org.elsquatrecaps.netvolution.shareddata.NetvolutionSharedData;
 import org.elsquatrecaps.netvolution.view.swing.tools.AbstractDataAndEditorBuilder;
 import org.elsquatrecaps.netvolution.view.swing.tools.PositionType;
 import org.elsquatrecaps.netvolution.view.swing.tools.VerificationProcessConfiguration;
+import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.optimization.SurviveOptimizationMethodValues;
 import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.InputOutputContributionValues;
 import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.NeuronTypesForStabilityCheckingValues;
 import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.actfunctions.ActivationFunction;
@@ -109,10 +110,10 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
         jPanel3 = new javax.swing.JPanel();
         jPanel22 = new javax.swing.JPanel();
         optimizationMethodUsedComboBox = new javax.swing.JComboBox<>();
-        jLabel34 = new javax.swing.JLabel();
-        survivalRateValueTextField = new javax.swing.JTextField();
-        jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
+        survivalRateOrDeathTaxLabel = new javax.swing.JLabel();
+        survivalRateOrDeathTaxValueTextField = new javax.swing.JTextField();
+        jLabel41 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         useNeuronDensityAsReproductiveAdvantgeCheck = new javax.swing.JCheckBox();
@@ -410,7 +411,7 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
         maximumEvolutionaryCyclesValueSlider.setValue(1000);
 
         maximumCyclesToProcessFactorComboBox.setFont(new java.awt.Font("Liberation Sans", 0, 10)); // NOI18N
-        maximumCyclesToProcessFactorComboBox.setModel(new DefaultComboBoxModel<FactorModelMinimumCyclesToProcess>(new FactorModelMinimumCyclesToProcess[] {FactorModelMinimumCyclesToProcess.FOR_THOUSAND, FactorModelMinimumCyclesToProcess.FOR_ONE}));
+        maximumCyclesToProcessFactorComboBox.setModel(new DefaultComboBoxModel<FactorModelMinimumCyclesToProcess>(FactorModelMinimumCyclesToProcess.values()) /*new DefaultComboBoxModel<FactorModelMinimumCyclesToProcess>(new FactorModelMinimumCyclesToProcess[] {FactorModelMinimumCyclesToProcess.FOR_THOUSAND, FactorModelMinimumCyclesToProcess.FOR_ONE})*/);
 
         jLabel40.setText(")");
 
@@ -473,44 +474,52 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
         jPanel3Layout.rowWeights = new double[] {1.0, 1.0};
         jPanel3.setLayout(jPanel3Layout);
 
+        jPanel22.setPreferredSize(new java.awt.Dimension(482, 5));
+
         optimizationMethodUsedComboBox.setModel(new DefaultComboBoxModel<org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.optimization.SurviveOptimizationMethodValues>(org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.optimization.SurviveOptimizationMethodValues.values()));
-
-        jLabel34.setText("Survival rate value:");
-
-        survivalRateValueTextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        survivalRateValueTextField.setText("50");
-
-        jLabel35.setText("%");
+        optimizationMethodUsedComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optimizationMethodUsedComboBoxActionPerformed(evt);
+            }
+        });
 
         jLabel36.setText("Opt. meth. selector:");
+
+        survivalRateOrDeathTaxLabel.setText("Min Survival Rate:");
+
+        survivalRateOrDeathTaxValueTextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        survivalRateOrDeathTaxValueTextField.setText("10");
+
+        jLabel41.setText("%");
 
         javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
         jPanel22.setLayout(jPanel22Layout);
         jPanel22Layout.setHorizontalGroup(
             jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel22Layout.createSequentialGroup()
+            .addGroup(jPanel22Layout.createSequentialGroup()
                 .addComponent(jLabel36)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(optimizationMethodUsedComboBox, 0, 147, Short.MAX_VALUE)
+                .addComponent(optimizationMethodUsedComboBox, 0, 136, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel34)
+                .addComponent(survivalRateOrDeathTaxLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(survivalRateValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(survivalRateOrDeathTaxValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
-                .addComponent(jLabel35)
-                .addContainerGap())
+                .addComponent(jLabel41)
+                .addGap(20, 20, 20))
         );
         jPanel22Layout.setVerticalGroup(
             jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel22Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(survivalRateValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel34)
-                    .addComponent(jLabel35)
                     .addComponent(optimizationMethodUsedComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel36))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel36)
+                    .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(survivalRateOrDeathTaxValueTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(survivalRateOrDeathTaxLabel)
+                        .addComponent(jLabel41)))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -529,7 +538,6 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
 
         useCalculationEficiencyAsReproductiveAdvantgeCheck.setText("Calculation eficiency");
 
-        usePerformanceAsReproductiveAdvantgeCheck.setSelected(true);
         usePerformanceAsReproductiveAdvantgeCheck.setText("Performance");
         usePerformanceAsReproductiveAdvantgeCheck.setEnabled(false);
 
@@ -538,9 +546,9 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
+                .addContainerGap(27, Short.MAX_VALUE)
                 .addComponent(jLabel5)
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -712,7 +720,7 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
         jPanel23Layout.setVerticalGroup(
             jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel23Layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addContainerGap(33, Short.MAX_VALUE)
                 .addComponent(lineageRecordingCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -722,7 +730,7 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel38)
                     .addComponent(numberOfWorstProgenyLinesToSaveTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
@@ -786,7 +794,7 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
                 .addContainerGap()
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -830,9 +838,9 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
                 .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -1692,6 +1700,19 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_followCalculationEficiencyCheckActionPerformed
 
+    private void optimizationMethodUsedComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optimizationMethodUsedComboBoxActionPerformed
+        // TODO add your handling code here:
+        if(this.optimizationMethodUsedComboBox.getSelectedItem().equals(SurviveOptimizationMethodValues.FIX_DEATH_TAX)){
+            this.survivalRateOrDeathTaxLabel.setText("Death Tax: ");
+            int v = this.getJsonConfigData().get("evolutionarySystem").get("evolutionProcessConditions").get("fixDeathTaxValue").asInt();
+            this.survivalRateOrDeathTaxValueTextField.setText(String.valueOf(v));
+        }else{
+            this.survivalRateOrDeathTaxLabel.setText("Min Survival Rate:");
+            int v = this.getJsonConfigData().get("evolutionarySystem").get("evolutionProcessConditions").get("survivalRateValue").asInt();
+            this.survivalRateOrDeathTaxValueTextField.setText(String.valueOf(v));
+        }
+    }//GEN-LAST:event_optimizationMethodUsedComboBoxActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1782,13 +1803,12 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
-    private javax.swing.JLabel jLabel34;
-    private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1866,7 +1886,8 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
     private javax.swing.JButton saveEvolveDataButton;
     private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JMenuItem stopEvolveProcessMenuItem;
-    private javax.swing.JTextField survivalRateValueTextField;
+    private javax.swing.JLabel survivalRateOrDeathTaxLabel;
+    private javax.swing.JTextField survivalRateOrDeathTaxValueTextField;
     private javax.swing.JTextField thresholdMutationRateField;
     private javax.swing.JCheckBox useCalculationEficiencyAsReproductiveAdvantgeCheck;
     private javax.swing.JCheckBox useCalculationEficiencyAsVitalAdvantgeCheck;
@@ -1969,9 +1990,12 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
 //                useCalculationEficiencyAsVitalAdvantgeCheck.setEnabled(true);
 //            }
 //        });
-        survivalRateValueTextField.addActionListener((ActionEvent ae)->{
-            _controlValueChanged(survivalRateValueTextField, 0, 100, true);
+        survivalRateOrDeathTaxValueTextField.addActionListener((ActionEvent ae)->{
+            _controlValueChanged(survivalRateOrDeathTaxValueTextField, 0, 100, true);
         });
+//        maxSurvivalRateValueTextField.addActionListener((ActionEvent ae)->{
+//            _controlValueChanged(maxSurvivalRateValueTextField, 0, 100, true);
+//        });
         useNeuronDensityAsReproductiveAdvantgeCheck.addItemListener((ItemEvent ie) -> {
             if(ie.getStateChange()==ItemEvent.SELECTED){
                 useNeuronDensityAsVitalAdvantgeCheck.setSelected(false);
@@ -2106,22 +2130,41 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
         this.minimumAveragePerformaceValueLabel.setText(partialData.get("minimumAveragePerformance").asText());
         this.minimumAveragePerformaceValueSlider.setValue((int) (partialData.get("minimumAveragePerformance").asDouble()*100));
         int v = partialData.get("maximumCyclesToProcess").asInt();
-        maximumCyclesToProcessFactorComboBox.setSelectedItem(FactorModelMinimumCyclesToProcess.FOR_ONE);
+        FactorModelMinimumCyclesToProcess factor;
         if(v>=FactorModelMinimumCyclesToProcess.FOR_THOUSAND.getValue()){
-            v = partialData.get("maximumCyclesToProcess").asInt()/FactorModelMinimumCyclesToProcess.FOR_THOUSAND.getValue();
-            maximumCyclesToProcessFactorComboBox.setSelectedItem(FactorModelMinimumCyclesToProcess.FOR_THOUSAND);
+           factor = FactorModelMinimumCyclesToProcess.FOR_THOUSAND;
+        }else if(v>=FactorModelMinimumCyclesToProcess.FOR_HUNDRED.getValue()){
+            factor = FactorModelMinimumCyclesToProcess.FOR_HUNDRED;
+        }else if(v>=FactorModelMinimumCyclesToProcess.FOR_TEN.getValue()){
+            factor = FactorModelMinimumCyclesToProcess.FOR_TEN;
+        }else{
+            factor = FactorModelMinimumCyclesToProcess.FOR_ONE;
+        }
+        while(v%factor.getValue()!=0){
+            factor=factor.getPrevious();
+        }
+        v = v/factor.getValue();
+        maximumCyclesToProcessFactorComboBox.setSelectedItem(factor);
+//        if(v>=FactorModelMinimumCyclesToProcess.FOR_THOUSAND.getValue()){
+//            v = partialData.get("maximumCyclesToProcess").asInt()/FactorModelMinimumCyclesToProcess.FOR_THOUSAND.getValue();
+//            maximumCyclesToProcessFactorComboBox.setSelectedItem(FactorModelMinimumCyclesToProcess.FOR_THOUSAND);
 //        }else if(v>=FactorModelMinimumCyclesToProcess.FOR_HUNDRED.getValue()){
 //            v = partialData.get("maximumCyclesToProcess").asInt()/FactorModelMinimumCyclesToProcess.FOR_HUNDRED.getValue();
 //            maximumCyclesToProcessFactorComboBox.setSelectedItem(FactorModelMinimumCyclesToProcess.FOR_HUNDRED);
 //        }else if(v>=FactorModelMinimumCyclesToProcess.FOR_TEN.getValue()){
 //            v = partialData.get("maximumCyclesToProcess").asInt()/FactorModelMinimumCyclesToProcess.FOR_TEN.getValue();
 //            maximumCyclesToProcessFactorComboBox.setSelectedItem(FactorModelMinimumCyclesToProcess.FOR_TEN);
-        }
+//        }
         this.maximumEvolutionaryCyclesValueLabel.setText(String.valueOf((int)v));
         this.maximumEvolutionaryCyclesValueSlider.setValue(v);
         partialData = this.getJsonConfigData().get("evolutionarySystem").get("evolutionProcessConditions");
         this.optimizationMethodUsedComboBox.setSelectedIndex(partialData.get("optimizationMethodUsed").asInt(0));
-        this.survivalRateValueTextField.setText(String.valueOf(partialData.get("survivalRateValue").asInt()));
+//        this.maxSurvivalRateValueTextField.setText(String.valueOf(partialData.get("maxSurvivalRateValue").asInt()));
+        if(this.optimizationMethodUsedComboBox.getSelectedItem().equals(SurviveOptimizationMethodValues.FIX_DEATH_TAX)){
+            this.survivalRateOrDeathTaxValueTextField.setText(String.valueOf(partialData.get("fixDeathTaxValue").asInt()));
+        }else{
+            this.survivalRateOrDeathTaxValueTextField.setText(String.valueOf(partialData.get("survivalRateValue").asInt()));
+        }
         this.usePerformanceAsVitalAdvantgeCheck.setSelected(true);
         this.usePerformanceAsReproductiveAdvantgeCheck.setSelected(true);
         this.useNeuronDensityAsVitalAdvantgeCheck.setSelected(partialData.get("vitalAdvantages").get("neuronConnectionDensityComp").asBoolean());
@@ -2202,7 +2245,12 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
         partialData.put("maximumCyclesToProcess", v);
         partialData = (ObjectNode) this.getJsonConfigData().get("evolutionarySystem").get("evolutionProcessConditions");
         partialData.put("optimizationMethodUsed", optimizationMethodUsedComboBox.getSelectedIndex());
-        partialData.put("survivalRateValue", Integer.valueOf(survivalRateValueTextField.getText()));
+//        partialData.put("maxSurvivalRateValue", Integer.valueOf(maxSurvivalRateValueTextField.getText()));
+        if(optimizationMethodUsedComboBox.getSelectedItem().equals(SurviveOptimizationMethodValues.FIX_DEATH_TAX)){
+            partialData.put("fixDeathTaxValue", Integer.valueOf(survivalRateOrDeathTaxValueTextField.getText()));
+        }else{
+            partialData.put("survivalRateValue", Integer.valueOf(survivalRateOrDeathTaxValueTextField.getText()));
+        }
         partialData = (ObjectNode) this.getJsonConfigData().get("evolutionarySystem").get("evolutionProcessConditions").get("vitalAdvantages");
         partialData.put("neuronConnectionDensityComp", Boolean.valueOf(this.useNeuronDensityAsVitalAdvantgeCheck.isSelected()));
         partialData.put("calculationEficiency", Boolean.valueOf(this.useCalculationEficiencyAsVitalAdvantgeCheck.isSelected()));
@@ -2346,7 +2394,7 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
         
         String name;
         int value;
-        
+
 //        private static final HashMap<String, FactorModelMinimumCyclesToProcess> nameMap = new HashMap<>();
 //        static {
 //            nameMap.put("X 1000", FOR_THOUSAND);
@@ -2372,7 +2420,31 @@ public final class ConfigurationSystemFrame extends NetvolutionBasicFrame {
         public int getValue(){
             return this.value;
         }
+        
+        public FactorModelMinimumCyclesToProcess getNext(){
+            return FactorModelMinimumCyclesToProcess.values()[(FactorModelMinimumCyclesToProcess.values().length + (this.ordinal()-1))%FactorModelMinimumCyclesToProcess.values().length];
+        }
 
+        public FactorModelMinimumCyclesToProcess getPrevious(){
+            return FactorModelMinimumCyclesToProcess.values()[(this.ordinal()+1)%FactorModelMinimumCyclesToProcess.values().length];
+        }
+
+        public boolean isFirst(){
+            return this.ordinal()==FactorModelMinimumCyclesToProcess.values().length-1;
+        }
+        
+        public boolean isLast(){
+            return this.ordinal()==0;
+        }
+        
+        public static FactorModelMinimumCyclesToProcess getFirst(){
+            return FactorModelMinimumCyclesToProcess.values()[0];
+        }
+
+        public static FactorModelMinimumCyclesToProcess getLast(){
+            return FactorModelMinimumCyclesToProcess.values()[FactorModelMinimumCyclesToProcess.values().length-1];
+        }
+        
 //        public static String fromName(String v){
 //            return nameMap.get(v);
 //        }

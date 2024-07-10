@@ -17,6 +17,7 @@ import org.elsquatrecaps.rsjcb.netvolution.events.EvolutionaryProcessInfoEditor;
 import org.elsquatrecaps.rsjcb.netvolution.events.FinishedEvolutionaryCycleEvent;
 import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.calculators.PtpNeuralNetworkTrueTableGlobalCalculator;
 import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.PtpNeuralNetworkTrueTableEvolutionaryEnvironment;
+import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.optimization.OptimizationMethod;
 import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.optimization.SurviveOptimizationMethodValues;
 import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.PtpNeuralNetworkConfiguration;
 import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.PtpVectorNeuralNetwork;
@@ -56,8 +57,8 @@ public class EvolutionaryEventSwingWorker extends SwingWorker<Void, Evolutionary
             List<String> vitalAdvantages, 
             List<String> reproductiveAdvantages, 
             List<String> propertiesToFollow, 
-            SurviveOptimizationMethodValues surviveOptimizationMethodValues, 
-            double survivalRate,
+            OptimizationMethod optimizationMethod, 
+            double minSurvivalRate,
             boolean keepProgenyLines) {
         
         PtpVectorNeuralNetwork[] population = new PtpVectorNeuralNetwork[populationSize];
@@ -72,8 +73,8 @@ public class EvolutionaryEventSwingWorker extends SwingWorker<Void, Evolutionary
                 new PtpNeuralNetworkTrueTableGlobalCalculator(vitalAdvantages, reproductiveAdvantages, environmentInputSet, environmentOutputSet), 
                 new PtpVectorNeuralNetworkMutationProcessor(), 
                 propertiesToFollow,
-                surviveOptimizationMethodValues,
-                survivalRate,
+                optimizationMethod,
+                minSurvivalRate,
                 keepProgenyLines);
         environment.getMutationProcessor().setConnectionMutationRate(nnConfig.getConnectionMutationRate());
         environment.getMutationProcessor().setDisconnectionMutationRate(nnConfig.getDisconnectionMutationRate());

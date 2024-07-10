@@ -16,6 +16,7 @@ import org.elsquatrecaps.rsjcb.netvolution.events.EvolutionaryProcessInfoEditor;
 import org.elsquatrecaps.rsjcb.netvolution.events.FinishedEvolutionaryCycleEvent;
 import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.calculators.PtpNeuralNetworkTrueTableGlobalCalculator;
 import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.PtpNeuralNetworkTrueTableEvolutionaryEnvironment;
+import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.optimization.OptimizationMethod;
 import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.optimization.SurviveOptimizationMethodValues;
 import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.PtpNeuralNetworkConfiguration;
 import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.PtpVectorNeuralNetwork;
@@ -60,7 +61,7 @@ public class EvolutionaryEventSwingProcessor implements RunnableFuture<Void>{
             List<String> vitalAdvantages, 
             List<String> reproductiveAdvantages, 
             List<String> propertiesToFollow, 
-            SurviveOptimizationMethodValues surviveOptimizationMethodValues, 
+            OptimizationMethod optimizationMethod, 
             double survivalRate,
             boolean keepProgenyLines) {
         
@@ -69,7 +70,7 @@ public class EvolutionaryEventSwingProcessor implements RunnableFuture<Void>{
                 new PtpNeuralNetworkTrueTableGlobalCalculator(vitalAdvantages, reproductiveAdvantages, environmentInputSet, environmentOutputSet), 
                 new PtpVectorNeuralNetworkMutationProcessor(), 
                 propertiesToFollow,
-               surviveOptimizationMethodValues,
+               optimizationMethod,
                survivalRate,
                keepProgenyLines);
         for(int i=0; i<populationSize; i++){

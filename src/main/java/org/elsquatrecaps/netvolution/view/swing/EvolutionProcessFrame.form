@@ -846,7 +846,7 @@
                               </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jPanel14" pref="475" max="32767" attributes="0"/>
+                          <Component id="jPanel14" pref="471" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>

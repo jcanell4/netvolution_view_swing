@@ -26,6 +26,8 @@ import org.elsquatrecaps.rsjcb.netvolution.events.FinishedEvolutionaryCycleEvent
 import org.elsquatrecaps.rsjcb.netvolution.events.InitialEvolutionaryProcessEvent;
 import org.elsquatrecaps.rsjcb.netvolution.events.ProgenyLinesEvent;
 import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.calculators.SinglePropertyCalculatorItems;
+import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.optimization.OptimizationMethod;
+import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.optimization.OptimizeMethodItems;
 import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.optimization.SurviveOptimizationMethodValues;
 import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.InputOutputContributionValues;
 import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.NeuronTypesForStabilityCheckingValues;
@@ -2050,8 +2052,10 @@ public class EvolutionProcessFrame extends NetvolutionBasicFrame{
         
         
         SurviveOptimizationMethodValues surviveOptimizationMethodValues = SurviveOptimizationMethodValues.getValueById(evolProcessConditions.get("optimizationMethodUsed").asInt());
-        double survivalRate = evolProcessConditions.get("survivalRateValue").asInt()/100.0;
+        double minSurvivalRate = evolProcessConditions.get("survivalRateValue").asInt()/100.0;
         boolean keepProgenyLines = jsonConfig.get("evolutionarySystem").get("optionalDataToRecording").get("lineage").get("recording").asBoolean();
+        OptimizeMethodItems factory = OptimizeMethodItems.getItem(surviveOptimizationMethodValues.getValue());
+        OptimizationMethod optimizationMethod = factory.getInstance(this.getSharedData().getArrayValuesFromAttributeListOfConfig(factory.getForInitalizingInstanceFromConfig()));
         
         worker = new EvolutionaryEventSwingWorker();
 //        worker = new EvolutionaryEventSwingProcessor();
@@ -2062,8 +2066,8 @@ public class EvolutionProcessFrame extends NetvolutionBasicFrame{
                         vitalAdvantages,
                         reproductiveAdvantages,
                         propertiesToFollow,
-                        surviveOptimizationMethodValues,
-                        survivalRate,
+                        optimizationMethod,
+                        minSurvivalRate,
                         keepProgenyLines);
         worker.addEventHandler(EvolutionaryEvent.eventType, ev -> this.fileWriteDataOnEvolutionEvent(ev));
         worker.addEventHandler(ErrorOnProcessEvolution.eventType, ev -> this.onErrorProcessEvolution((ErrorOnProcessEvolution) ev));
