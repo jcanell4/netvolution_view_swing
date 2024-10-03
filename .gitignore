@@ -25,6 +25,7 @@
 
 .DS_Store
 
+/data1/
 /data2/
 /data/*
 !/data/tmp.dat
