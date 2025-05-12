@@ -17,8 +17,8 @@ import org.elsquatrecaps.rsjcb.netvolution.events.EvolutionaryProcessInfoEditor;
 import org.elsquatrecaps.rsjcb.netvolution.events.FinishedEvolutionaryCycleEvent;
 import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.calculators.PtpNeuralNetworkTrueTableGlobalCalculator;
 import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.PtpNeuralNetworkTrueTableEvolutionaryEnvironment;
+import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.PtpVectorNeuralNetworkTrueTableEvolutionaryEnvironmentBuilder;
 import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.optimization.OptimizationMethod;
-import org.elsquatrecaps.rsjcb.netvolution.evolutiveprocess.optimization.SurviveOptimizationMethodValues;
 import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.PtpNeuralNetworkConfiguration;
 import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.PtpVectorNeuralNetwork;
 import org.elsquatrecaps.rsjcb.netvolution.neuralnetwork.PtpVectorNeuralNetworkMutationProcessor;
@@ -60,31 +60,42 @@ public class EvolutionaryEventSwingWorker extends SwingWorker<Void, Evolutionary
             OptimizationMethod optimizationMethod, 
             double minSurvivalRate,
             boolean keepProgenyLines) {
+        PtpVectorNeuralNetworkTrueTableEvolutionaryEnvironmentBuilder environmentBuilder = new PtpVectorNeuralNetworkTrueTableEvolutionaryEnvironmentBuilder();
+        environmentBuilder.setPopulationSize(populationSize)
+                .setViAdv(vitalAdvantages)
+                .setRepAdv(vitalAdvantages)
+                .setEnvironmentInputSet(environmentInputSet)
+                .setEnvironmentOutputSet(environmentOutputSet)
+                .setNnConfig(nnConfig)
+                .setNnPropertiesToFollow(propertiesToFollow)
+                .setOptimizationMethod(optimizationMethod)
+                .setPerformaceName("performance");
+        environment = environmentBuilder.build();
         
-        PtpVectorNeuralNetwork[] population = new PtpVectorNeuralNetwork[populationSize];
-        
-        for(int i=0; i<populationSize; i++){
-            PtpVectorNeuralNetwork net = new PtpVectorNeuralNetwork();
-            PtpVectorNeuralNetworkRandomInitializer.initialize(net, nnConfig);
-            population[i] = net;
-        }
-        environment = new PtpNeuralNetworkTrueTableEvolutionaryEnvironment(
-                population, 
-                new PtpNeuralNetworkTrueTableGlobalCalculator(vitalAdvantages, reproductiveAdvantages, environmentInputSet, environmentOutputSet), 
-                new PtpVectorNeuralNetworkMutationProcessor(), 
-                propertiesToFollow,
-                optimizationMethod,
-                minSurvivalRate,
-                keepProgenyLines);
-        environment.getMutationProcessor().setConnectionMutationRate(nnConfig.getConnectionMutationRate());
-        environment.getMutationProcessor().setDisconnectionMutationRate(nnConfig.getDisconnectionMutationRate());
-        environment.getMutationProcessor().setMaxThresholdExchangeFactorValue(nnConfig.getMaxThresholdExchangeFactorValue());
-        environment.getMutationProcessor().setMaxWeightExchangevalue(nnConfig.getMaxWeightExchangevalue());
-        environment.getMutationProcessor().setReceiverNeuronNumberMutationRate(nnConfig.getReceiverNeuronNumberMutationRate());
-        environment.getMutationProcessor().setResponseNeuronNumberMutationRate(nnConfig.getResponseNeuronNumberMutationRate());
-        environment.getMutationProcessor().setThresholdMutationRate(nnConfig.getThresholdMutationRate());
-        environment.getMutationProcessor().setWeightsMutationRate(nnConfig.getWeightsMutationRate());
-        environment.getMutationProcessor().setInputContributionrobability(nnConfig.getInputContributionrobability());
+//        PtpVectorNeuralNetwork[] population = new PtpVectorNeuralNetwork[populationSize];
+//        
+//        for(int i=0; i<populationSize; i++){
+//            PtpVectorNeuralNetwork net = new PtpVectorNeuralNetwork();
+//            PtpVectorNeuralNetworkRandomInitializer.initialize(net, nnConfig);
+//            population[i] = net;
+//        }
+//        environment = new PtpNeuralNetworkTrueTableEvolutionaryEnvironment(
+//                population, 
+//                new PtpNeuralNetworkTrueTableGlobalCalculator(vitalAdvantages, reproductiveAdvantages, environmentInputSet, environmentOutputSet), 
+//                new PtpVectorNeuralNetworkMutationProcessor(), 
+//                propertiesToFollow,
+//                optimizationMethod,
+//                minSurvivalRate,
+//                keepProgenyLines);
+//        environment.getMutationProcessor().setConnectionMutationRate(nnConfig.getConnectionMutationRate());
+//        environment.getMutationProcessor().setDisconnectionMutationRate(nnConfig.getDisconnectionMutationRate());
+//        environment.getMutationProcessor().setMaxThresholdExchangeFactorValue(nnConfig.getMaxThresholdExchangeFactorValue());
+//        environment.getMutationProcessor().setMaxWeightExchangevalue(nnConfig.getMaxWeightExchangevalue());
+//        environment.getMutationProcessor().setReceiverNeuronNumberMutationRate(nnConfig.getReceiverNeuronNumberMutationRate());
+//        environment.getMutationProcessor().setResponseNeuronNumberMutationRate(nnConfig.getResponseNeuronNumberMutationRate());
+//        environment.getMutationProcessor().setThresholdMutationRate(nnConfig.getThresholdMutationRate());
+//        environment.getMutationProcessor().setWeightsMutationRate(nnConfig.getWeightsMutationRate());
+//        environment.getMutationProcessor().setInputContributionrobability(nnConfig.getInputContributionrobability());
         if(environmentInputSet.length!=environmentOutputSet.length){
             throw new RuntimeException("The input array must be the same length as the output array");
         }

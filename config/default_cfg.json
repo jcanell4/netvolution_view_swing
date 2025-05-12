@@ -11,11 +11,11 @@
         "evolutionProcessConditions": {
             "vitalAdvantages": {
                 "neuronConnectionDensityComp": false,
-                "calculationEficiency": true
+                "calculationEficiency": false
             },
             "reproductiveAdvantages": {
                 "neuronConnectionDensityComp": true,
-                "calculationEficiency": false
+                "calculationEficiency": true
             },
             "optimizationMethodUsed": 0,
             "survivalRateValue": 2,
@@ -37,39 +37,27 @@
             "verificationProcess": "TRUE_TABLE",
             "configEditors": {
                 "TRUE_TABLE": [{
-                        "inputs": [0, 0, 0],
+                        "inputs": [0, 0],
                         "outputs": [0]
                     }, {
-                        "inputs": [0, 0, 1],
+                        "inputs": [0, 1],
+                        "outputs": [1]
+                    }, {
+                        "inputs": [1, 0],
+                        "outputs": [1]
+                    }, {
+                        "inputs": [1, 1],
                         "outputs": [0]
-                    }, {
-                        "inputs": [0, 1, 0],
-                        "outputs": [0]
-                    }, {
-                        "inputs": [0, 1, 1],
-                        "outputs": [1]
-                    }, {
-                        "inputs": [1, 0, 0],
-                        "outputs": [0]
-                    }, {
-                        "inputs": [1, 0, 1],
-                        "outputs": [1]
-                    }, {
-                        "inputs": [1, 1, 0],
-                        "outputs": [1]
-                    }, {
-                        "inputs": [1, 1, 1],
-                        "outputs": [1]
                     }],
                 "EVENT_ENVIRONMENT": "This editor is not implemented yet"
             }
         }
     },
     "AnnBuilding": {
-        "populationSize": 100,
-        "numberOfInputs": 3,
+        "populationSize": 500,
+        "numberOfInputs": 2,
         "numberOfOutputs": 1,
-        "numberOfReceivingNeurons": 3,
+        "numberOfReceivingNeurons": 2,
         "numberOfResponseNeurons": 1,
         "hasIntermediateNeurons": false,
         "initialNumberOfNeurons": 3,
@@ -90,11 +78,11 @@
     },
     "AnnMutation": {
         "linearityChangingRate": 0.1,
-        "linearityMaxIncrement": 0.5,
+        "linearityMaxIncrement": 1.0,
         "weightChangingRate": 0.1,
-        "weightMaxIncrement": 0.5,
-        "connectionRate": 0.0075,
-        "disconnectionRate": 0.0075,
+        "weightMaxIncrement": 1.0,
+        "connectionRate": 0.003,
+        "disconnectionRate": 0.003,
         "contributionInputRate": 0.005,
         "contributionOutpuRate": 0.005
     }
